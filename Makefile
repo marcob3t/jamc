@@ -6,7 +6,7 @@ OBJ_SERIAL=$(SRC:src/%.f90=Obj-serial/%.o)
 ############################################
 
 default: serial
-         parallel
+#         parallel
 
 serial:
 	$(MAKE) $(MFLAGS) -C Obj-$@
@@ -17,7 +17,7 @@ serial:
 clean:
 	$(MAKE) $(MFLAGS) -C Obj-serial clean
 	$(MAKE) $(MFLAGS) -C examples clean
-        $(MAKE) $(MFLAGS) -MPCC Obj-parallel clean
+#        $(MAKE) $(MFLAGS) -MPCC Obj-parallel clean
 
 check: serial
 	$(MAKE) $(MFLAGS) -C examples check
