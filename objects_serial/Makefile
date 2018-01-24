@@ -5,8 +5,8 @@ CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer
 LDLIBS=-lm
 
 # list of source files
-SRC=ljmd.c
 VPATH=../src
+SRC=$(wildcard $(VPATH)/*.c)
 OBJ=$(SRC:%.c=%.o)
 
 default: ../ljmd-serial.x
@@ -20,7 +20,7 @@ clean:
 
 # compilation pattern rule for objects
 %.o: %.c
-	$(CC) -c $(CFLAGS) $<
+	$(CC) -c $(CFLAGS) $< -o $@
 
 # dependencies
 ljmd.o: ljmd.c
