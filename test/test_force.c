@@ -7,6 +7,7 @@ int main(int argc, char * argv[]) {
   char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
   FILE *fp, *fforce;
   mdsys_t sys;
+  int i;
 
   // Read input file: Initialize the sys object
   if(get_a_line(stdin,line)) return 1;
@@ -43,10 +44,10 @@ int main(int argc, char * argv[]) {
   /* read restart */
   fp=fopen(restfile,"r");
   if(fp) {
-    for (int i=0; i<sys.natoms; ++i) {
+    for (i=0; i<sys.natoms; ++i) {
       fscanf(fp,"%lf%lf%lf",sys.rx+i, sys.ry+i, sys.rz+i);
     }
-    for (int i=0; i<sys.natoms; ++i) {
+    for (i=0; i<sys.natoms; ++i) {
       fscanf(fp,"%lf%lf%lf",sys.vx+i, sys.vy+i, sys.vz+i);
     }
     fclose(fp);
@@ -63,7 +64,7 @@ int main(int argc, char * argv[]) {
 
   fforce =  fopen("test_force.dat", "a");
 
-  for (int i = 0; i < (sys.natoms); ++i)
+  for (i = 0; i < (sys.natoms); ++i)
     fprintf(fforce, "%d%20.8f%20.8f%20.8f\n", i, sys.fx[i], sys.fy[i], sys.fz[i]);
 
   fclose(fforce);
