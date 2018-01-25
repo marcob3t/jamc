@@ -32,16 +32,16 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 ## Remarks:
 
 #### optimization testing log:
-* force function, testing with argon_2916
+* force function, serial, testing with argon_2916
 
-
-|120-130 ms|serial|original|
-|----------|------|--------|
-|115-120 ms|serial|+ 1D pre truncate|
-|110-120 ms|serial|+ use r-square|
-|95-105  ms|serial|+ inline pbc|
-|93-100  ms|serial|+ replace i==j|
-|93-100  ms|serial|+ rsq_inv|
+|timing|feature|
+|------|-------|
+|120-130 ms|original|
+|115-120 ms|+ 1D pre truncate|
+|110-120 ms|+ use r-square|
+|95-105  ms|+ inline pbc|
+|93-100  ms|+ replace i==j|
+|93-100  ms|+ rsq_inv|
 
 
 This package contains simplified MD code with multi-threading
