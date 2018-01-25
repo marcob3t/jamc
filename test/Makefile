@@ -31,8 +31,8 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADS)
 %.o: %.c $(HEADS)
 	$(CC) $(INC) -c $(CFLAGS) $< -o $@
 
-clean:
-	rm *.o $(OBJDIR)/*.o $(EXE)
-
 help:
 	echo $(EXE)
+
+clean:
+	-rm $(EXE) *.o $(OBJDIR)/*.o
