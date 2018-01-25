@@ -83,8 +83,9 @@ int main(int argc, char **argv) {
     // force(&sys);
     ffp=fopen(forcefile,"r");
     if(ffp) {
+        int buf;
         for (i=0; i<sys.natoms; ++i) {
-            fscanf(ffp,"%d%20.8f%20.8f%20.8f\n",sys.fx+i, sys.fy+i, sys.fz+i);
+            fscanf(ffp,"%d%20.8f%20.8f%20.8f\n", buf, sys.fx+i, sys.fy+i, sys.fz+i);
         }
         fclose(ffp);
     } else {
