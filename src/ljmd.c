@@ -7,6 +7,7 @@ int main(int argc, char **argv)
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
     FILE *fp,*traj,*erg;
     mdsys_t sys;
+    //double timer=0; // for recording time
 
     /* read input file */
     if(get_a_line(stdin,line)) return 1;
@@ -63,6 +64,7 @@ int main(int argc, char **argv)
     /* initialize forces and energies.*/
     sys.nfi=0;
     force(&sys);
+    
     ekin(&sys);
     
     erg=fopen(ergfile,"w");
