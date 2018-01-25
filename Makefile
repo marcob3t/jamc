@@ -10,13 +10,14 @@ default: serial
 serial:
 	$(MAKE) $(MFLAGS) -C objects_$@
 
+unitest:
+	$(MAKE) $(MFLAGS) -C test default
+
 clean:
 	$(MAKE) $(MFLAGS) -C objects_serial clean
 	$(MAKE) $(MFLAGS) -C examples clean
+	$(MAKE) $(MFLAGS) -C test clean
 
-check: serial
+check: serial unitest
 	$(MAKE) $(MFLAGS) -C examples check
-
-test:
-	$(MAKE) $(MFLAGS) -C test
 

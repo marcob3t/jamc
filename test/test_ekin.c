@@ -45,9 +45,10 @@ int main(int argc, char **argv){
     }
     
     ekin(&sys);
-    fn = fopen("../reference/test_ekin.dat","w");
+    //fn = fopen("../reference/test_ekin.dat","w"); // only for first run
+    fn = fopen("test_ekin.dat","w");
     // print out to reference file
-    fprintf(fn,"% 20.8f\n",sys.ekin);
+    fprintf(fn,"%.8f\n",sys.ekin);
     
     free(sys.vx);
     free(sys.vy);
