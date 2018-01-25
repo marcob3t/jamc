@@ -14,28 +14,29 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 ## Contributions:
 
 #### Jiaxin Wang:
-    * unit test for kinetic energy
-    * calculation optimization
+* unit test for kinetic energy
+* calculation optimization
 
 #### Marco Bettiol:
-    * unit test for integration (velvervelt)
-    * multi-threading
+* unit test for integration (velvervelt)
+* multi-threading
 
 #### Carolina Bonivento:
-    * unit test for input/output
-    * python interface
+* unit test for input/output
+* python interface
 
 #### Alejandra Foggia:
-    * unit test for force calculation
-    * MPI
+* unit test for force calculation
+* MPI
 
 ## Remarks:
 
 #### optimization testing log:
 * force function, testing with argon_2916
 
-|----------|------|--------|
+
 |120-130 ms|serial|original|
+|----------|------|--------|
 |115-120 ms|serial|+ 1D pre truncate|
 |110-120 ms|serial|+ use r-square|
 |95-105  ms|serial|+ inline pbc|
