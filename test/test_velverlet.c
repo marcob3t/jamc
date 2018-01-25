@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
     if(ffp) {
         int buf;
         for (i=0; i<sys.natoms; ++i) {
-            fscanf(ffp,"%d%20.8f%20.8f%20.8f\n", buf, sys.fx+i, sys.fy+i, sys.fz+i);
+            fscanf(ffp,"%d%lf%lf%lf\n", &buf, sys.fx+i, sys.fy+i, sys.fz+i);
         }
         fclose(ffp);
     } else {
