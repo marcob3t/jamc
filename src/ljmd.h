@@ -30,9 +30,18 @@ struct _mdsys {
     double *rx, *ry, *rz;
     double *vx, *vy, *vz;
     double *fx, *fy, *fz;
+    
+    // for cells
+    int n;
+};
+
+struct _cell {
+    int num; // number of particles
+    int idx[100];
 };
 
 typedef struct _mdsys mdsys_t;
+typedef struct _cell cell_t;
 
 /* helper function: read a line and then return
    the first string with whitespace stripped off */
