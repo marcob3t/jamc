@@ -1,4 +1,5 @@
 #include "ljmd.h"
+#include "cell.h"
 
 /* main */
 int main(int argc, char **argv) 
@@ -31,13 +32,6 @@ int main(int argc, char **argv)
     sys.dt=atof(line);
     if(get_a_line(stdin,line)) return 1;
     nprint=atoi(line);
-    
-    
-    // get cell number
-    int n = floor(sys.box/sys.rcut);
-    sys.n = n*n*n;
-    // create cell struct pointer
-    cell_t cel[sys.n];
     
     /* allocate memory */
     sys.rx=(double *)malloc(sys.natoms*sizeof(double));
