@@ -16,14 +16,14 @@ int main(int argc, char **argv){
     sys.vz=(double *)malloc(sys.natoms*sizeof(double));
     
     for (i=0; i<sys.natoms; ++i) {
-        *(sys.vx+i) = 1e-3*(rand()%10);
-        *(sys.vy+i) = 1e-3*(rand()%10);
-        *(sys.vz+i) = 1e-3*(rand()%10);
+        *(sys.vx+i) = 1e-3;
+        *(sys.vy+i) = 1e-3;
+        *(sys.vz+i) = 1e-3;
     }
     
     ekin(&sys);
     //fn = fopen("../reference/test_ekin.dat","w"); // only for first run
-    fn = fopen("test_kinetic.dat","w");
+    fn = fopen("test_ekin.dat","w");
     // print out to reference file
     fprintf(fn,"%.8f\n",sys.ekin);
     
