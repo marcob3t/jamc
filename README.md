@@ -31,7 +31,7 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 
 ## Remarks:
 
-#### optimization testing log:
+#### optimization testing log (clang, i7, 3.1GHz):
 * force function, serial, testing with argon_2916
 
 |timing|feature|
@@ -42,6 +42,7 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 |95-105  ms|+ inline pbc|
 |93-100  ms|+ replace i==j|
 |93-100  ms|+ rsq_inv|
+(in old gcc std, we can only use "static inline")
 
 * velverlet function, serial, testing with argon_2916
 

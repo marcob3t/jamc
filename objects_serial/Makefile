@@ -1,7 +1,7 @@
 # -*- Makefile -*-
 SHELL=/bin/sh
 CC=gcc
-CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -finline-functions
+CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer #-finline-functions
 LDLIBS=-lm
 
 # list of source files
