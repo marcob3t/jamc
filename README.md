@@ -1,4 +1,4 @@
-# jamc
+# jamc report
 P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 
 ## Collaborators:
