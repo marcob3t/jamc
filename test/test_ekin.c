@@ -12,9 +12,8 @@ int main(int argc, char **argv){
     // number of atoms
     if(get_a_line(stdin,line)) return 1;
     sys.natoms=atoi(line);
-    // mass of atoms
     if(get_a_line(stdin,line)) return 1;
-    sys.mass=atof(line);
+    sys.redmass = atof(line)*mvsq2e; // reduced mass
     // keep these trash just to read restfile name
     if(get_a_line(stdin,line)) return 1;
     if(get_a_line(stdin,line)) return 1;

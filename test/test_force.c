@@ -13,7 +13,7 @@ int main(int argc, char * argv[]) {
   if(get_a_line(stdin,line)) return 1;
   sys.natoms=atoi(line);
   if(get_a_line(stdin,line)) return 1;
-  sys.mass=atof(line);
+  sys.redmass = atof(line)*mvsq2e; // reduced mass
   if(get_a_line(stdin,line)) return 1;
   sys.epsilon=atof(line);
   if(get_a_line(stdin,line)) return 1;

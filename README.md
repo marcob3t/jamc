@@ -43,6 +43,15 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 |93-100  ms|+ replace i==j|
 |93-100  ms|+ rsq_inv|
 
+* velverlet function, serial, testing with argon_2916
+
+|time(consider looping)|feature|
+|----------------------|-------|
+|~95 s|original|
+|~94 s|+ reduced mass|
+
+(the sys.mass is always used as sys.mass*mvq2e, 1s would be negligible in single simulation,
+but would be meaningful in, ie., Bayesian analysis)
 
 This package contains simplified MD code with multi-threading
 parallelization for simulating atoms with a Lennard-Jones potential.
