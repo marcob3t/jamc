@@ -5,7 +5,6 @@
 /* test main */
 int main(int argc, char **argv){
     int i;
-    FILE *fn;
     mdsys_t sys;
     
     sys.natoms=10;
@@ -22,13 +21,16 @@ int main(int argc, char **argv){
     }
     
     ekin(&sys);
-    //fn = fopen("../reference/test_ekin.dat","w"); // only for first run
-    fn = fopen("test_ekin.dat","w");
-    // print out to reference file
-    fprintf(fn,"%.8f\n",sys.ekin);
     
     free(sys.vx);
     free(sys.vy);
     free(sys.vz);
-    return 0;
+    
+    double expected = 10*0.5*sys.redmass*(3.e-6);
+    if(sys.ekin==expected) {
+        return 0;
+    }
+    else {
+        return 1;
+    }
 }
