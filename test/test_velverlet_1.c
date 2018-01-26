@@ -1,15 +1,14 @@
-// reference output of this test should be test_velverlet.dat
-
 #include "ljmd.h"
 
 
 
 /* main */
 int main(int argc, char **argv) {
-  
+
     mdsys_t sys;
     int max_test_sample = 4; // max number of atoms used for testing
     int i;
+    FILE *ofp;
 
     /* allocate memory */
     sys.rx=(double *)malloc(max_test_sample * sizeof(double));
@@ -22,7 +21,8 @@ int main(int argc, char **argv) {
     sys.fy=(double *)malloc(max_test_sample * sizeof(double));
     sys.fz=(double *)malloc(max_test_sample * sizeof(double));
 
-
+    /* open output file */
+    ofp = fopen("test_velverlet_1.dat","w");
 
     /* TEST # 1a: 3 particles far away form each other; v = 0 */
 
@@ -76,10 +76,10 @@ int main(int argc, char **argv) {
     /* propagate system with velverlet and check */
     velverlet_1(&sys);
 
-    printf("TEST # 1a: 3 particles far away form each other; v = 0\n");
+    fprintf(ofp, "TEST # 1a: 3 particles far away form each other; v = 0\n");
     for (i=0; i < sys.natoms; ++i) {
-      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
-      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
+      fprintf(ofp, "r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      fprintf(ofp, "v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
     }
 
     /* ************************************************* */
@@ -108,10 +108,10 @@ int main(int argc, char **argv) {
     /* propagate system with velverlet and check */
     velverlet_1(&sys);
 
-    printf("TEST # 1b: 3 particles far away form each other; v != 0\n");
+    fprintf(ofp, "TEST # 1b: 3 particles far away form each other; v != 0\n");
     for (i=0; i < sys.natoms; ++i) {
-      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
-      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
+      fprintf(ofp, "r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      fprintf(ofp, "v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
     }
 
     /* ************************************************* */
@@ -156,10 +156,10 @@ int main(int argc, char **argv) {
     /* propagate system with velverlet and check */
     velverlet_1(&sys);
 
-    printf("TEST # 2a: 3 particles, 2 close to each other; v = 0\n");
+    fprintf(ofp, "TEST # 2a: 3 particles, 2 close to each other; v = 0\n");
     for (i=0; i < sys.natoms; ++i) {
-      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
-      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
+      fprintf(ofp, "r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      fprintf(ofp, "v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
     }
 
     /* ************************************************* */
@@ -190,10 +190,10 @@ int main(int argc, char **argv) {
     /* propagate system with velverlet and check */
     velverlet_1(&sys);
 
-    printf("TEST # 2b: 3 particles, 2 close to each other; v != 0\n");
+    fprintf(ofp, "TEST # 2b: 3 particles, 2 close to each other; v != 0\n");
     for (i=0; i < sys.natoms; ++i) {
-      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
-      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
+      fprintf(ofp, "r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      fprintf(ofp, "v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
     }
 
     /* ************************************************* */
@@ -238,10 +238,10 @@ int main(int argc, char **argv) {
     /* propagate system with velverlet and check */
     velverlet_1(&sys);
 
-    printf("TEST # 3a: 3 particles, 3 close to each other; v = 0\n");
+    fprintf(ofp, "TEST # 3a: 3 particles, 3 close to each other; v = 0\n");
     for (i=0; i < sys.natoms; ++i) {
-      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
-      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
+      fprintf(ofp, "r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      fprintf(ofp, "v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
     }
 
     /* ************************************************* */
@@ -272,10 +272,10 @@ int main(int argc, char **argv) {
     /* propagate system with velverlet and check */
     velverlet_1(&sys);
 
-    printf("TEST # 3a: 3 particles, 3 close to each other; v = 0\n");
+    fprintf(ofp, "TEST # 3a: 3 particles, 3 close to each other; v = 0\n");
     for (i=0; i < sys.natoms; ++i) {
-      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
-      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
+      fprintf(ofp, "r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      fprintf(ofp, "v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
     }
 
     /* ************************************************* */
@@ -283,6 +283,8 @@ int main(int argc, char **argv) {
 
 
     /* clean up: free memory */
+    fclose(ofp);
+
     free(sys.rx);
     free(sys.ry);
     free(sys.rz);
