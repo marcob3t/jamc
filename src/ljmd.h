@@ -30,6 +30,10 @@ struct _mdsys {
     double *rx, *ry, *rz;
     double *vx, *vy, *vz;
     double *fx, *fy, *fz;
+    
+    // for cells
+    int cn;
+    double cl;
 };
 
 typedef struct _mdsys mdsys_t;

@@ -5,10 +5,9 @@ default: check
 clean:
 	rm -f *.xyz *.dat
 
-check: ../test_ekin.x ../test_force.x ../test_velverlet_1.x ../test_velverlet_2.x ../ljmd-serial.x
+check: ../test_ekin.x ../test_cell.x ../test_velverlet_1.x ../test_velverlet_2.x ../ljmd-serial.x
 	../test_ekin.x
-	../test_force.x < argon_108.inp
-	cmp test_force.dat ../reference/test_force.dat || exit 1
+	../test_cell.x
 	../test_velverlet_1.x
 	cmp test_velverlet_1.dat ../reference/test_velverlet_1.dat || exit 1
 	../test_velverlet_2.x
