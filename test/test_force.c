@@ -8,7 +8,7 @@ int main(int argc, char * argv[]) {
 
   // Initialize the system
   sys3.natoms = 3;
-  sys3.mass = 39.948;
+  sys3.redmass = 39.948 * mvsq2e;
   sys3.epsilon = 0.2379;
   sys3.sigma = 3.405;
   sys3.rcut = 8.5;
@@ -157,7 +157,7 @@ int main(int argc, char * argv[]) {
 
   // Initialize the system
   sys4.natoms = 4;
-  sys4.mass = 39.948;
+  sys3.redmass = 39.948 * mvsq2e;
   sys4.epsilon = 0.2379;
   sys4.sigma = 3.405;
   sys4.rcut = 8.5;
