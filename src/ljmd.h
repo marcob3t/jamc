@@ -55,7 +55,8 @@ void ekin(mdsys_t *sys);
 void force(mdsys_t *sys);
 
 /* velocity verlet */
-void velverlet(mdsys_t *sys);
+void velverlet_1(mdsys_t *sys);
+void velverlet_2(mdsys_t *sys);
 
 /* append data to output. */
 void output(mdsys_t *sys, FILE *erg, FILE *traj);

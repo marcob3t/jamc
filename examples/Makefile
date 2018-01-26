@@ -5,12 +5,14 @@ default: check
 clean:
 	rm -f *.xyz *.dat
 
-check: ../test_velverlet.x ../test_ekin.x ../test_force.x ../ljmd-serial.x
-	../test_velverlet.x ../reference/test_force.dat < argon_108.inp
-	cmp test_velverlet.dat ../reference/test_velverlet.dat || exit 1
+check: ../test_ekin.x ../test_force.x ../test_velverlet_1.x ../test_velverlet_2.x ../ljmd-serial.x
 	../test_ekin.x
 	../test_force.x < argon_108.inp
 	cmp test_force.dat ../reference/test_force.dat || exit 1
+	../test_velverlet_1.x
+	cmp test_velverlet_1.dat ../reference/test_velverlet_1.dat || exit 1
+	../test_velverlet_2.x
+	cmp test_velverlet_2.dat ../reference/test_velverlet_2.dat || exit 1
 	../ljmd-serial.x < argon_108.inp
 	head -10 argon_108.dat | awk '{printf("%d %.6f %.6f %.6f\n",$$1,$$2,$$3,$$4);}'> a.dat
 	head -10 ../reference/argon_108.dat | awk '{printf("%d %.6f %.6f %.6f\n",$$1,$$2,$$3,$$4);}'> b.dat

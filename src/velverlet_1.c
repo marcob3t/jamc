@@ -1,7 +1,7 @@
 #include "ljmd.h"
 
 /* velocity verlet */
-void velverlet(mdsys_t *sys)
+void velverlet_1(mdsys_t *sys)
 {
     int i;
     double coef = 0.5*sys->dt/ (sys->redmass);
@@ -15,13 +15,4 @@ void velverlet(mdsys_t *sys)
         sys->rz[i] += sys->dt*sys->vz[i];
     }
 
-    /* compute forces and potential energy */
-    force(sys);
-
-    /* second part: propagate velocities by another half step */
-    for (i=0; i<sys->natoms; ++i) {
-        sys->vx[i] += coef * sys->fx[i] ;
-        sys->vy[i] += coef * sys->fy[i] ;
-        sys->vz[i] += coef * sys->fz[i] ;
-    }
 }
