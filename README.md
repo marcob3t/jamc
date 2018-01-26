@@ -50,9 +50,25 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 |----------------------|-------|
 |~95 s|original|
 |~94 s|+ reduced mass|
+|~80 s|+ tearing down spherical truncate into 1D aggressive truncate|
 
 (the sys.mass is always used as sys.mass*mvq2e, 1s would be negligible in single simulation,
 but would be meaningful in, ie., Bayesian analysis)
+
+1D aggressive truncate means:
+
+```
+/* get distance between particle i and j */
+rx=pbc(sys->rx[i] - sys->rx[j], boxby2);
+rsq = rx*rx;
+if(rsq>rcutsq) continue; // 1D pre truncate
+ry=pbc(sys->ry[i] - sys->ry[j], boxby2);
+rsq += ry*ry;
+if(rsq>rcutsq) continue; // 1D pre truncate
+rz=pbc(sys->rz[i] - sys->rz[j], boxby2);
+rsq += rz*rz;
+if(rsq>rcutsq) continue; // 1D pre truncate
+```
 
 This package contains simplified MD code with multi-threading
 parallelization for simulating atoms with a Lennard-Jones potential.
