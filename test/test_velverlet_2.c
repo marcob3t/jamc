@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 
     /* initialize system */
     sys.natoms = 3;
-    sys.mass = 39.948;
+    sys.redmass = 39.948 * mvsq2e;
     sys.epsilon = 0.2379;
     sys.sigma = 3.405;
     sys.rcut = 8.5;
