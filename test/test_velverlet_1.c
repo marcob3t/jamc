@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 
 
 
-    /* TEST # 1: 3 particles far away form each other */
+    /* TEST # 1a: 3 particles far away form each other; v = 0 */
 
     /* initialize system */
     sys.natoms = 3;
@@ -39,141 +39,243 @@ int main(int argc, char **argv) {
     /* initialize other members (not needed actually) */
     sys.nfi=0;
     sys.ekin=1.;
-    sys.epot=1.;
+    sys.epot=0.;
     sys.temp=1.;
 
     /* initialize system positions */
     sys.rx[0] = 0.;
-    sys.rx[0] = 0.;
-    sys.rx[0] = 0.;
+    sys.ry[0] = 0.;
+    sys.rz[0] = 0.;
 
     sys.rx[1] = 8.54;
-    sys.rx[1] = 0.;
-    sys.rx[1] = 0.;
+    sys.ry[1] = 0.;
+    sys.rz[1] = 0.;
 
     sys.rx[2] = 0.;
-    sys.rx[2] = 8.54;
-    sys.rx[2] = 0.;
+    sys.ry[2] = 8.54;
+    sys.rz[2] = 0.;
 
-    /* initialize system velocities */
+    /* initialize system velocities to 0 */
+    azzero(sys.vx, sys.natoms);
+    azzero(sys.vy, sys.natoms);
+    azzero(sys.vz, sys.natoms);
 
     /* initialize system forces */
+    sys.fx[0] = 0.;
+    sys.fy[0] = 0.;
+    sys.fz[0] = 0.;
+
+    sys.fx[1] = 0.;
+    sys.fy[1] = 0.;
+    sys.fz[1] = 0.;
+
+    sys.fx[2] = 0.;
+    sys.fy[2] = 0.;
+    sys.fz[2] = 0.;
 
     /* propagate system with velverlet and check */
-    // velverlet(&sys);
+    velverlet_1(&sys);
 
-    /* compute and print forces (TO BE REMOVED) */
-    force(&sys);
+    printf("TEST # 1a: 3 particles far away form each other; v = 0\n");
     for (i=0; i < sys.natoms; ++i) {
-      printf("%20.8f%20.8f%20.8f\n", sys.fx[i], sys.fy[i], sys.fz[i]);
+      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
     }
 
     /* ************************************************* */
 
 
 
-    /* TEST # 2: 3 particles, 2 close to each other */
-
-    /* initialize system */
+    /* TEST # 1b: 3 particles far away form each other; v != 0 */
 
     /* initialize system positions */
     sys.rx[0] = 0.;
-    sys.rx[0] = 0.;
-    sys.rx[0] = 0.;
+    sys.ry[0] = 0.;
+    sys.rz[0] = 0.;
 
-    sys.rx[1] = 1.;
-    sys.rx[1] = 0.;
-    sys.rx[1] = 0.;
+    sys.rx[1] = 8.54;
+    sys.ry[1] = 0.;
+    sys.rz[1] = 0.;
 
     sys.rx[2] = 0.;
-    sys.rx[2] = 8.54;
-    sys.rx[2] = 0.;
+    sys.ry[2] = 8.54;
+    sys.rz[2] = 0.;
 
-    /* initialize system velocities */
+    /* system velocities are not reinitialized */
 
-    /* initialize system forces */
+    /* system forces do not need to be reinitialized */
 
     /* propagate system with velverlet and check */
-    // velverlet(&sys);
+    velverlet_1(&sys);
 
-    /* compute and print forces (TO BE REMOVED) */
-    force(&sys);
+    printf("TEST # 1b: 3 particles far away form each other; v != 0\n");
     for (i=0; i < sys.natoms; ++i) {
-      printf("%20.8f%20.8f%20.8f\n", sys.fx[i], sys.fy[i], sys.fz[i]);
+      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
     }
 
     /* ************************************************* */
 
 
 
-    /* TEST # 3: 3 particles, 3 close to each other */
+    /* TEST # 2a: 3 particles, 2 close to each other; v = 0 */
 
     /* initialize system */
 
     /* initialize system positions */
     sys.rx[0] = 0.;
-    sys.rx[0] = 0.;
-    sys.rx[0] = 0.;
+    sys.ry[0] = 0.;
+    sys.rz[0] = 0.;
 
-    sys.rx[1] = 1.;
-    sys.rx[1] = 0.;
-    sys.rx[1] = 0.;
+    sys.rx[1] = 2.;
+    sys.ry[1] = 2.;
+    sys.rz[1] = 0.;
 
-    sys.rx[2] = -1.;
     sys.rx[2] = 0.;
-    sys.rx[2] = 0.;
+    sys.ry[2] = 0.;
+    sys.rz[2] = 8.54;
 
-    /* initialize system velocities */
+    /* initialize system velocities to 0 */
+    azzero(sys.vx, sys.natoms);
+    azzero(sys.vy, sys.natoms);
+    azzero(sys.vz, sys.natoms);
 
     /* initialize system forces */
+    sys.fx[0] = -22.10605666;
+    sys.fy[0] = -22.10605666;
+    sys.fz[0] = 0.;
+
+    sys.fx[1] = 22.10605666;
+    sys.fy[1] = 22.10605666;
+    sys.fz[1] = 0.;
+
+    sys.fx[2] = 0.;
+    sys.fy[2] = 0.;
+    sys.fz[2] = 0.;
 
     /* propagate system with velverlet and check */
-    // velverlet(&sys);
+    velverlet_1(&sys);
 
-    /* compute and print forces (TO BE REMOVED) */
-    force(&sys);
+    printf("TEST # 2a: 3 particles, 2 close to each other; v = 0\n");
     for (i=0; i < sys.natoms; ++i) {
-      printf("%20.8f%20.8f%20.8f\n", sys.fx[i], sys.fy[i], sys.fz[i]);
+      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
     }
 
     /* ************************************************* */
 
 
 
-    /* TEST # 4: 4 particles, 3 close to each other */
+    /* TEST # 2b: 3 particles, 2 close to each other; v != 0 */
 
     /* initialize system */
 
-    sys.natoms = 4;
-
     /* initialize system positions */
     sys.rx[0] = 0.;
-    sys.rx[0] = 0.;
-    sys.rx[0] = 0.;
+    sys.ry[0] = 0.;
+    sys.rz[0] = 0.;
 
-    sys.rx[1] = 1.;
-    sys.rx[1] = 0.;
-    sys.rx[1] = 0.;
+    sys.rx[1] = 2.;
+    sys.ry[1] = 2.;
+    sys.rz[1] = 0.;
 
-    sys.rx[2] = -1.;
     sys.rx[2] = 0.;
-    sys.rx[2] = 0.;
+    sys.ry[2] = 0.;
+    sys.rz[2] = 8.54;
 
-    sys.rx[3] = 0.;
-    sys.rx[3] = 8.54;
-    sys.rx[3] = 0.;
+    /* system velocities are not reinitialized */
 
-    /* initialize system velocities */
-
-    /* initialize system forces */
+    /* system forces do not need to be reinitialized */
 
     /* propagate system with velverlet and check */
-    // velverlet(&sys);
+    velverlet_1(&sys);
 
-    /* compute and print forces (TO BE REMOVED) */
-    force(&sys);
+    printf("TEST # 2b: 3 particles, 2 close to each other; v != 0\n");
     for (i=0; i < sys.natoms; ++i) {
-      printf("%20.8f%20.8f%20.8f\n", sys.fx[i], sys.fy[i], sys.fz[i]);
+      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
+    }
+
+    /* ************************************************* */
+
+
+
+    /* TEST # 3a: 3 particles, 3 close to each other; v = 0 */
+
+    /* initialize system */
+
+    /* initialize system positions */
+    sys.rx[0] = 1.5;
+    sys.ry[0] = 0.;
+    sys.rz[0] = 0.;
+
+    sys.rx[1] = 0.;
+    sys.ry[1] = 1.5;
+    sys.rz[1] = 0.;
+
+    sys.rx[2] = 0.;
+    sys.ry[2] = 0.;
+    sys.rz[2] = 1.5;
+
+    /* initialize system velocities to 0 */
+    azzero(sys.vx, sys.natoms);
+    azzero(sys.vy, sys.natoms);
+    azzero(sys.vz, sys.natoms);
+
+    /* initialize system forces */
+    sys.fx[0] = 2161.66698602;
+    sys.fy[0] = -1080.83349301;
+    sys.fz[0] = -1080.83349301;
+
+    sys.fx[1] = -1080.83349301;
+    sys.fy[1] = 2161.66698602;
+    sys.fz[1] = -1080.83349301;
+
+    sys.fx[2] = -1080.83349301;
+    sys.fy[2] = -1080.83349301;
+    sys.fz[2] = 2161.66698602;
+
+    /* propagate system with velverlet and check */
+    velverlet_1(&sys);
+
+    printf("TEST # 3a: 3 particles, 3 close to each other; v = 0\n");
+    for (i=0; i < sys.natoms; ++i) {
+      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
+    }
+
+    /* ************************************************* */
+
+
+    
+    /* TEST # 3b: 3 particles, 3 close to each other; v != 0 */
+
+    /* initialize system */
+
+    /* initialize system positions */
+    sys.rx[0] = 1.5;
+    sys.ry[0] = 0.;
+    sys.rz[0] = 0.;
+
+    sys.rx[1] = 0.;
+    sys.ry[1] = 1.5;
+    sys.rz[1] = 0.;
+
+    sys.rx[2] = 0.;
+    sys.ry[2] = 0.;
+    sys.rz[2] = 1.5;
+
+    /* system velocities are not reinitialized */
+
+    /* system forces do not need to be reinitialized */
+
+    /* propagate system with velverlet and check */
+    velverlet_1(&sys);
+
+    printf("TEST # 3a: 3 particles, 3 close to each other; v = 0\n");
+    for (i=0; i < sys.natoms; ++i) {
+      printf("r: %20.8f%20.8f%20.8f\n", sys.rx[i], sys.ry[i], sys.rz[i]);
+      printf("v: %20.8f%20.8f%20.8f\n", sys.vx[i], sys.vy[i], sys.vz[i]);
     }
 
     /* ************************************************* */
