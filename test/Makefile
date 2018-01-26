@@ -1,7 +1,7 @@
 # -*- Makefile for unit test -*-
 SHELL=/bin/sh
 CC=gcc
-CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer
+CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -finline-functions
 LDLIBS=-lm
 INC= -I$(INCDIR) -I.
 

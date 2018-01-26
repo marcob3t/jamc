@@ -29,4 +29,3 @@ double stamp(){
     return tv.tv_sec*1e+3 + tv.tv_usec*1e-3;
 }
 
-extern double pbc(double x, const double boxby2);
