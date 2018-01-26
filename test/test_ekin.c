@@ -9,8 +9,8 @@ int main(int argc, char **argv){
     mdsys_t sys;
     
     sys.natoms=10;
-    //sys.redmass = 39.948*2390.05736153349; // reduced mass
-    sys.mass = 39.948;
+    sys.redmass = 39.948*2390.05736153349; // reduced mass
+    //sys.mass = 39.948;
     sys.vx=(double *)malloc(sys.natoms*sizeof(double));
     sys.vy=(double *)malloc(sys.natoms*sizeof(double));
     sys.vz=(double *)malloc(sys.natoms*sizeof(double));
