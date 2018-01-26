@@ -9,16 +9,16 @@ int main(int argc, char **argv){
     mdsys_t sys;
     
     sys.natoms=10;
-    //sys.redmass = 39.948*2390.05736153349; // reduced mass
-    sys.mass = 39.948;
+    sys.redmass = 39.948*2390.05736153349; // reduced mass
+    //sys.mass = 39.948;
     sys.vx=(double *)malloc(sys.natoms*sizeof(double));
     sys.vy=(double *)malloc(sys.natoms*sizeof(double));
     sys.vz=(double *)malloc(sys.natoms*sizeof(double));
     
     for (i=0; i<sys.natoms; ++i) {
-        *(sys.vx+i) = 1e-3*(rand()%10);
-        *(sys.vy+i) = 1e-3*(rand()%10);
-        *(sys.vz+i) = 1e-3*(rand()%10);
+        *(sys.vx+i) = 1e-3;
+        *(sys.vy+i) = 1e-3;
+        *(sys.vz+i) = 1e-3;
     }
     
     ekin(&sys);
