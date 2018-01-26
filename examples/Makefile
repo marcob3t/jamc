@@ -6,8 +6,7 @@ clean:
 	rm -f *.xyz *.dat
 
 check: ../test_ekin.x ../test_force.x ../test_velverlet_1.x ../test_velverlet_2.x ../ljmd-serial.x
-	../test_ekin.x < argon_108.inp
-	cmp test_ekin.dat ../reference/test_ekin.dat || exit 1
+	../test_ekin.x
 	../test_force.x < argon_108.inp
 	cmp test_force.dat ../reference/test_force.dat || exit 1
 	../test_velverlet_1.x
