@@ -14,21 +14,21 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 ## Contributions:
 
 #### Jiaxin Wang:
-* unit test for kinetic energy [this file](./test/test_ekin.c)
-* calculation optimization (report below in "OPT log" section)
-* cell list module in cpp [this file](./src/cell.cc)
-* unit test for cell list [this file](./test/test_cell.c)
+* unit test for kinetic energy: [test_ekin](./test/test_ekin.c)
+* calculation optimization: report below in "OPT log" section
+* cell list module in cpp: [cell](./src/cell.cc)
+* unit test for cell list: [test_cell](./test/test_cell.c)
 
 #### Marco Bettiol:
-* unit test for integration [this file](./test/test_velverlet_1.c) [this file](./test/test_velverlet_2.c)
-* multi-threading
+* unit test for integration: [test_velverlet_1](./test/test_velverlet_1.c) [test_velverlet_2](./test/test_velverlet_2.c)
+* multi-threading: [force](./src/force.c)
 
 #### Carolina Bonivento:
-* unit test for input/output
-* python interface
+* unit test for input/output: [test_in](./test/test_in.c) [test_out](./test/test_out.c)
+* python interface:
 
 #### Alejandra Foggia:
-* unit test for force calculation
+* unit test for force calculation: [test_force](./test/test_force.c)
 * MPI
 
 
@@ -41,6 +41,7 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 * tiny modifications, testing with argon_2916
 
 force function single call timing:
+
 |timing (ms)|feature|
 |-------------------|-------|
 |120-130|original|
@@ -49,17 +50,17 @@ force function single call timing:
 |95-105 |+ inline pbc|
 |93-100 |+ replace i==j|
 |93-100 |+ rsq_inv|
-(in old gcc std, we can only use "static inline")
 
 * aggressive truncation, testing with argon_2916
 
 velverlet function accumulated timing:
+
 |time (s)|feature|
 |-----------------|-------|
 |~95 |original|
-|~75 |+ tearing down spherical truncate into 1D aggressive truncate|
+|~75 |+aggressive truncate|
 
-1D aggressive truncate means:
+aggressive truncate means:
 
 ```
 /* get distance between particle i and j */
@@ -78,6 +79,7 @@ which is a temporary solution before implementing cell-list
 * in further development we separate velverlet into velverlet_1,force,velverlet_2, in which we found force function dominates computing time, thus in following optimization we focus on force function
 
 force function accumulated timing:
+
 |argon_108 (ms)|argon_2916 (ms)|feature|
 |--------------|---------------|-------|
 |2999.177|99288.438|original|
@@ -94,6 +96,7 @@ comments: aggressive truncation is always benefitial, so we keep this algorithm 
 * OMP and MPI performances
 
 force function accumulated timing:
+
 |argon_108 (ms)|argon_2916 (ms)|MPI_procs/OMP_threads|feature|
 |||1/2|omp +agg. truncate|
 |||1/4|omp +agg. truncate|
@@ -110,6 +113,7 @@ force function accumulated timing:
 * applying cell-list
 
 force function accumulated timing:
+
 |argon_108 (ms)|argon_2916 (ms)|feature|
 |--------------|---------------|-------|
 |              |               |serial cell-list|
