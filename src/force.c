@@ -6,7 +6,7 @@ void force(mdsys_t *sys)
     double rsq,rsq_inv,r6,ffac;
     double rx,ry,rz;
     int i,j;
-    double epot=0.0; // reduction with openmp
+    double epot=0.0; // needed for reduction with openmp
     
     /* zero energy and forces */
     sys->epot=0.0;
@@ -23,7 +23,10 @@ void force(mdsys_t *sys)
 #endif
     {
 #ifdef _OPENMP
-#pragma omp for schedule(dynamic,9)
+#ifndef CHUNKSIZE
+#define CHUNKSIZE=9
+#endif
+#pragma omp for schedule(dynamic,CHUNKSIZE)
 #endif
         for(i=0; i < (sys->natoms); ++i) {
             for(j=0; j < i; ++j) {
