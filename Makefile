@@ -18,6 +18,7 @@ unitest:
 
 clean:
 	$(MAKE) $(MFLAGS) -C objects_serial clean
+	$(MAKE) $(MFLAGS) -C objects_openmp clean
 	$(MAKE) $(MFLAGS) -C examples clean
 	$(MAKE) $(MFLAGS) -C test clean
 
