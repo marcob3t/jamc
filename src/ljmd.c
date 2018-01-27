@@ -1,4 +1,5 @@
 #include "ljmd.h"
+#include "cell.h"
 
 /* main */
 int main(int argc, char **argv) 
