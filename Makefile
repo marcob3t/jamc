@@ -24,4 +24,5 @@ clean:
 
 check: serial openmp unitest
 	$(MAKE) $(MFLAGS) -C examples check
+	$(MAKE) $(MFLAGS) -C examples clean
 
