@@ -85,6 +85,8 @@ force function accumulated timing:
 |1384.265|42099.080|+Newton|
 |1198.499|37016.217|+Newton +agg. truncate|
 
+comments: aggressive truncation is always benefitial, so we keep this algorithm as standard
+
 * profiling with above modifications
 
 
@@ -92,10 +94,16 @@ force function accumulated timing:
 * OMP and MPI performances
 
 force function accumulated timing:
-|argon_108 (ms)|argon_2916 (ms)|feature|
-|||omp +agg. truncate|
-|||omp +Newton +agg. truncate|
-|||mpi +Newton +agg. truncate|
+|argon_108 (ms)|argon_2916 (ms)|MPI_procs/OMP_threads|feature|
+|||1/2|omp +agg. truncate|
+|||1/4|omp +agg. truncate|
+|||1/10|omp +agg. truncate|
+|||1/2|omp +agg. truncate +Newton|
+|||1/4|omp +agg. truncate +Newton|
+|||1/10|omp +agg. truncate +Newton|
+|||2/1|mpi +agg. truncate +Newton|
+|||4/1|mpi +agg. truncate +Newton|
+|||10/1|mpi +agg. truncate +Newton|
 
 
 

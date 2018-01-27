@@ -20,4 +20,5 @@ clean:
 
 check: serial unitest
 	$(MAKE) $(MFLAGS) -C examples check
+	$(MAKE) $(MFLAGS) -C examples clean
 
