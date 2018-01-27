@@ -84,20 +84,21 @@ comments: aggressive truncation is always benefitial, so we keep this algorithm 
 
 force function accumulated timing:
 
-|argon_108 (ms)|argon_2916 (ms)|MPI_procs/OMP_threads|feature|
-|--------------|---------------|---------------------|-------|
-|||1/2|omp +agg. trunc|
-|||1/3|omp +agg. trunc|
-|||1/4|omp +agg. trunc|
-|||1/5|omp +agg. trunc|
-|||1/6|omp +agg. trunc|
-|||1/7|omp +agg. trunc|
-|||1/8|omp +agg. trunc|
-|||1/9|omp +agg. trunc|
-|||1/10|omp +agg. trunc|
+|argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
+|--------------|--------|---------------------|-------|
+|73217.0729|1.00|1/1|omp +agg. trunc|
+|37895.96006|1.93|1/2|omp +agg. trunc|
+|26387.43521|2.77|1/3|omp +agg. trunc|
+|20478.64648|3.58|1/4|omp +agg. trunc|
+|16802.16675|4.36|1/5|omp +agg. trunc|
+|13997.1981|5.23|1/6|omp +agg. trunc|
+|12071.90107|6.07|1/7|omp +agg. trunc|
+|10585.75518|6.92|1/8|omp +agg. trunc|
+|9361.658057|7.82|1/9|omp +agg. trunc|
+|8516.886572|8.60|1/10|omp +agg. trunc|
 
-|argon_108 (ms)|argon_2916 (ms)|MPI_procs/OMP_threads|feature|
-|--------------|---------------|---------------------|-------|
+|argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
+|--------------|--------|---------------------|-------|
 |||1/2|omp +agg. +Newton|
 |||1/3|omp +agg. +Newton|
 |||1/4|omp +agg. +Newton|
