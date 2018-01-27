@@ -14,11 +14,13 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 ## Contributions:
 
 #### Jiaxin Wang:
-* unit test for kinetic energy
-* calculation optimization
+* unit test for kinetic energy [this file](./test/test_ekin.c)
+* calculation optimization (report below in "OPT log" section)
+* cell list module in cpp [this file](./src/cell.cc)
+* unit test for cell list [this file](./test/test_cell.c)
 
 #### Marco Bettiol:
-* unit test for integration (velvervelt)
+* unit test for integration [this file](./test/test_velverlet_1.c) [this file](./test/test_velverlet_2.c)
 * multi-threading
 
 #### Carolina Bonivento:
@@ -29,31 +31,33 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 * unit test for force calculation
 * MPI
 
-## Remarks:
 
-#### optimization testing log (clang, i7, 3.1GHz):
-* force function, serial, testing with argon_2916
+## OPT log:
+(serial code run with i7 3.1GHz, parallel code run with Ulysses)
 
-|timing|feature|
-|------|-------|
-|120-130 ms|original|
-|115-120 ms|+ 1D pre truncate|
-|110-120 ms|+ use r-square|
-|95-105  ms|+ inline pbc|
-|93-100  ms|+ replace i==j|
-|93-100  ms|+ rsq_inv|
+* profiling original code
+
+
+* tiny modifications, testing with argon_2916
+
+force function single call timing:
+|timing (ms)|feature|
+|-------------------|-------|
+|120-130|original|
+|115-120|+ 1D pre truncate|
+|110-120|+ use r-square|
+|95-105 |+ inline pbc|
+|93-100 |+ replace i==j|
+|93-100 |+ rsq_inv|
 (in old gcc std, we can only use "static inline")
 
-* velverlet function, serial, testing with argon_2916
+* aggressive truncation, testing with argon_2916
 
-|time(consider looping)|feature|
-|----------------------|-------|
-|~95 s|original|
-|~94 s|+ reduced mass|
-|~80 s|+ tearing down spherical truncate into 1D aggressive truncate|
-
-(the sys.mass is always used as sys.mass*mvq2e, 1s would be negligible in single simulation,
-but would be meaningful in, ie., Bayesian analysis)
+velverlet function accumulated timing:
+|time (s)|feature|
+|-----------------|-------|
+|~95 |original|
+|~75 |+ tearing down spherical truncate into 1D aggressive truncate|
 
 1D aggressive truncate means:
 
@@ -69,17 +73,40 @@ rz=pbc(sys->rz[i] - sys->rz[j], boxby2);
 rsq += rz*rz;
 if(rsq>rcutsq) continue; // 1D pre truncate
 ```
+which is a temporary solution before implementing cell-list
 
-This package contains simplified MD code with multi-threading
-parallelization for simulating atoms with a Lennard-Jones potential.
+* in further development we separate velverlet into velverlet_1,force,velverlet_2, in which we found force function dominates computing time, thus in following optimization we focus on force function
 
-The bundled makefiles are set up to compile the executable once
-with OpenMP disabled and once with OpenMP enabled with each build
-placing the various object files in separate directories.
+force function accumulated timing:
+|argon_108 (ms)|argon_2916 (ms)|feature|
+|--------------|---------------|-------|
+|2999.177|99288.438|original|
+|2477.652|76481.576|+agg. truncate|
+|1384.265|42099.080|+Newton|
+|1198.499|37016.217|+Newton +agg. truncate|
 
-The examples directory contains 3 sets of example input decks
-and the reference directory the corresponding outputs.
+* profiling with above modifications
 
-Type: make
-to compile everything and: make clean
-to remove all compiled objects
+
+
+* OMP and MPI performances
+
+force function accumulated timing:
+|argon_108 (ms)|argon_2916 (ms)|feature|
+|||omp +agg. truncate|
+|||omp +Newton +agg. truncate|
+|||mpi +Newton +agg. truncate|
+
+
+
+* applying cell-list
+
+force function accumulated timing:
+|argon_108 (ms)|argon_2916 (ms)|feature|
+|--------------|---------------|-------|
+|              |               |serial cell-list|
+
+* profiling with cell list
+
+
+
