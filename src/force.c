@@ -6,6 +6,7 @@ void force(mdsys_t *sys)
     double rsq,rsq_inv,r6,ffac;
     double rx,ry,rz;
     int i,j;
+    double epot=0.0; // reduction with openmp
     
     /* zero energy and forces */
     sys->epot=0.0;
@@ -18,11 +19,11 @@ void force(mdsys_t *sys)
     double c12 = sys->epsilon*pow(sys->sigma,12);
 
 #ifdef _OPENMP
-#pragma omp parallel private(i,j, rx, ry, rz, rsq, rsq_inv, r6, ffac) reduction(+,epot)
+#pragma omp parallel private(i,j, rx, ry, rz, rsq, rsq_inv, r6, ffac) reduction(+:epot)
 #endif
     {
 #ifdef _OPENMP
-#pragma omp for
+#pragma omp for schedule(dynamic,9)
 #endif
         for(i=0; i < (sys->natoms); ++i) {
             for(j=0; j < i; ++j) {
@@ -42,7 +43,7 @@ void force(mdsys_t *sys)
                 rsq_inv = 1.0/rsq;
                 r6 = rsq_inv*rsq_inv*rsq_inv;
                 ffac = (48*c12*r6-24*c6)*r6*rsq_inv;
-                sys->epot += 2*r6*(c12*r6-c6);
+                epot += 2*r6*(c12*r6-c6);
                 sys->fx[i] += rx*ffac;
                 sys->fy[i] += ry*ffac;
                 sys->fz[i] += rz*ffac;
@@ -67,7 +68,7 @@ void force(mdsys_t *sys)
                 rsq_inv = 1.0/rsq;
                 r6 = rsq_inv*rsq_inv*rsq_inv;
                 ffac = (48*c12*r6-24*c6)*r6*rsq_inv;
-                sys->epot += 2*r6*(c12*r6-c6);
+                epot += 2*r6*(c12*r6-c6);
                 sys->fx[i] += rx*ffac;
                 sys->fy[i] += ry*ffac;
                 sys->fz[i] += rz*ffac;
@@ -75,4 +76,5 @@ void force(mdsys_t *sys)
             }
         }
     }
+    sys->epot = epot;
 }
