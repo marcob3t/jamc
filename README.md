@@ -38,19 +38,6 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 * profiling original code
 
 
-* tiny modifications, testing with argon_2916
-
-force function single call timing:
-
-|timing (ms)|feature|
-|-------------------|-------|
-|120-130|original|
-|115-120|+ 1D pre truncate|
-|110-120|+ use r-square|
-|95-105 |+ inline pbc|
-|93-100 |+ replace i==j|
-|93-100 |+ rsq_inv|
-
 * aggressive truncation, testing with argon_2916
 
 velverlet function accumulated timing:
@@ -60,7 +47,7 @@ velverlet function accumulated timing:
 |~95 |original|
 |~75 |+aggressive truncate|
 
-aggressive truncate means:
+aggressive truncation means:
 
 ```
 /* get distance between particle i and j */
@@ -83,9 +70,9 @@ force function accumulated timing:
 |argon_108 (ms)|argon_2916 (ms)|feature|
 |--------------|---------------|-------|
 |2999.177|99288.438|original|
-|2477.652|76481.576|+agg. truncate|
+|2477.652|76481.576|+agg. trunc|
 |1384.265|42099.080|+Newton|
-|1198.499|37016.217|+Newton +agg. truncate|
+|1198.499|37016.217|+Newton +agg. trunc|
 
 comments: aggressive truncation is always benefitial, so we keep this algorithm as standard
 
@@ -98,15 +85,16 @@ comments: aggressive truncation is always benefitial, so we keep this algorithm 
 force function accumulated timing:
 
 |argon_108 (ms)|argon_2916 (ms)|MPI_procs/OMP_threads|feature|
-|||1/2|omp +agg. truncate|
-|||1/4|omp +agg. truncate|
-|||1/10|omp +agg. truncate|
-|||1/2|omp +agg. truncate +Newton|
-|||1/4|omp +agg. truncate +Newton|
-|||1/10|omp +agg. truncate +Newton|
-|||2/1|mpi +agg. truncate +Newton|
-|||4/1|mpi +agg. truncate +Newton|
-|||10/1|mpi +agg. truncate +Newton|
+|--------------|---------------|---------------------|-------|
+|||1/2|omp +agg. trunc|
+|||1/4|omp +agg. trunc|
+|||1/10|omp +agg. trunc|
+|||1/2|omp +agg. +Newton|
+|||1/4|omp +agg. +Newton|
+|||1/10|omp +agg. +Newton|
+|||2/1|mpi +agg. +Newton|
+|||4/1|mpi +agg. +Newton|
+|||10/1|mpi +agg. +Newton|
 
 
 
