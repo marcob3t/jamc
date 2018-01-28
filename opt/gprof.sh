@@ -1,6 +1,5 @@
 #!/bin/bash
 
-cd ..
 make
 cd examples
 rm gmon.out

@@ -1,7 +1,7 @@
 # -*- Makefile for unit test -*-
 SHELL=/bin/sh
 CC=g++
-CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer
+CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -fexpensive-optimizations
 LDLIBS=-lm
 INC= -I$(INCDIR) -I.
 
@@ -39,4 +39,4 @@ help:
 	echo $(EXE)
 
 clean:
-	-rm $(EXE) *.o $(OBJDIR)/*.o
+	rm -f $(EXE) *.o $(OBJDIR)/*.o

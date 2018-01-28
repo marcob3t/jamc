@@ -142,6 +142,19 @@ force function accumulated timing:
 
 comments: aggressive truncation is benefitial, so we keep it as standard *until* cell list
 
+* compiling flags
+
+```
+-ffast-math -O3
+```
+are the flags can give significant boost to computing time, '-O3' gives almost 2x
+
+others like
+```
+-msse3 -fexpensive-optimizations
+```
+give only a slight/negligible improvement
+
 
 * OMP and MPI performances
 
