@@ -46,11 +46,14 @@ int get_a_line(FILE *fp, char *buf);
 void azzero(double *d, const int n);
 
 /* helper function: apply minimum image convention */
+/*
 static inline double pbc(double x, const double boxby2) {
     while (x >  boxby2) x -= 2.0*boxby2;
     while (x < -boxby2) x += 2.0*boxby2;
     return x;
 }
+ */
+double pbc(double x, const double boxby2); // for profiling
 
 /* compute kinetic energy */
 void ekin(mdsys_t *sys);
