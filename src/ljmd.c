@@ -6,9 +6,10 @@ int main(int argc, char **argv)
 {
     int nprint, i;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
-    FILE *fp,*traj,*erg;
-    mdsys_t sys;
-    double timer=0; // for recording time
+    mdsys_t sys; FILE *fp;
+#ifdef TIMING
+    double timer = 0; // for recording time
+#endif
 
     /* read input file */
     if(get_a_line(stdin,line)) return 1;
@@ -65,38 +66,50 @@ int main(int argc, char **argv)
     /* initialize forces and energies.*/
     sys.nfi=0;
     force(&sys);
-    
     ekin(&sys);
     
+#ifndef TIMING
+    FILE *traj,*erg;
     erg=fopen(ergfile,"w");
     traj=fopen(trajfile,"w");
-
     printf("Starting simulation with %d atoms for %d steps.\n",sys.natoms, sys.nsteps);
     printf("     NFI            TEMP            EKIN                 EPOT              ETOT\n");
     output(&sys, erg, traj);
+#endif
+    
 
     /**************************************************/
     /* main MD loop */
     
     for(sys.nfi=1; sys.nfi <= sys.nsteps; ++sys.nfi) {
-
+        
+        /* propagate system and recompute energies */
+#ifdef TIMING
+        velverlet_1(&sys);
+        timer -= stamp();
+        force(&sys);
+        timer += stamp();
+        velverlet_2(&sys);
+#else
         /* write output, if requested */
         if ((sys.nfi % nprint) == 0)
             output(&sys, erg, traj);
-        
-        /* propagate system and recompute energies */
         velverlet_1(&sys);
         force(&sys);
         velverlet_2(&sys);
+#endif
         ekin(&sys);
     }
     /**************************************************/
 
     /* clean up: close files, free memory */
+#ifdef TIMING
+    printf("\n timing \n\t %f ms \n\n",timer);
+#else
     printf("Simulation Done.\n");
-    printf("\n timing: %.2f\n\n",timer);
     fclose(erg);
     fclose(traj);
+#endif
 
     free(sys.rx);
     free(sys.ry);
