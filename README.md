@@ -34,7 +34,7 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 
 
 ## OPT log:
-(serial code run with i7 3.1GHz, parallel code run with Ulysses, related source/data files in [here](./opt/) )
+(related source files in [here](./opt/) )
 
 * profiling original code
 
@@ -162,16 +162,10 @@ force function accumulated timing:
 
 |argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
 |--------------|--------|---------------------|-------|
-|||1/2|+Newton +agg.|
-|||1/3|+Newton +agg.|
-|||1/4|+Newton +agg.|
-|||1/5|+Newton +agg.|
-|||1/6|+Newton +agg.|
-|||1/7|+Newton +agg.|
-|||1/8|+Newton +agg.|
-|||1/9|+Newton +agg.|
 |||1/10|+Newton +agg.|
-
+|||2/10|+Newton +agg.|
+|||3/10|+Newton +agg.|
+|||4/10|+Newton +agg.|
 
 
 * applying cell-list

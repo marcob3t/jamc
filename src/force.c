@@ -212,8 +212,7 @@ void force(mdsys_t *sys)
     int i,j;
     double epot=0.0; // needed for reduction with openmp
     
-    // zero energy and forces
-    sys->epot=0.0;
+    // zero forces
     azzero(sys->fx,sys->natoms);
     azzero(sys->fy,sys->natoms);
     azzero(sys->fz,sys->natoms);
@@ -223,7 +222,7 @@ void force(mdsys_t *sys)
     double c12 = sys->epsilon*pow(sys->sigma,12);
     
 #ifdef _OPENMP
-#pragma omp parallel private(i,j, rsq, rsq_inv, r6, ffac) reduction(+:epot)
+#pragma omp parallel private(i,j,rx,ry,rz,rsq,rsq_inv,r6,ffac) reduction(+:epot)
 #endif
     {
 #ifdef _OPENMP
