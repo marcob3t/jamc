@@ -162,6 +162,19 @@ force function accumulated timing:
 
 |argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
 |--------------|--------|---------------------|-------|
+||1.00|1/1|+agg. trunc newt(atomic)|
+||1.93|1/2|+agg. trunc newt(atomic)|
+||2.77|1/3|+agg. trunc newt(atomic)|
+||3.58|1/4|+agg. trunc newt(atomic)|
+||4.36|1/5|+agg. trunc newt(atomic)|
+||5.23|1/6|+agg. trunc newt(atomic)|
+||6.07|1/7|+agg. trunc newt(atomic)|
+||6.92|1/8|+agg. trunc newt(atomic)|
+||7.82|1/9|+agg. trunc newt(atomic)|
+||8.60|1/10|+agg. trunc newt(atomic)|
+
+|argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
+|--------------|--------|---------------------|-------|
 |||1/10|+Newton +agg.|
 |||2/10|+Newton +agg.|
 |||3/10|+Newton +agg.|
