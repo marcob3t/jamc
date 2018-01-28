@@ -5,5 +5,5 @@
 *.swp
 *.so
 *.a
-
+*.dSYM
 
