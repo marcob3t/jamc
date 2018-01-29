@@ -8,7 +8,7 @@
 int main(int argc, char **argv) 
 {
     int nprint, i;
-#ifdef _USE_MPI
+#ifdef USE_MPI
     int nprocs = 1;
 #endif
     int rank = 0;
