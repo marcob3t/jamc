@@ -29,16 +29,23 @@ int main(int argc, char **argv) {
     sys.cl = sys.box/sys.cn;
     cell_t* cel = new cell_t[(sys.cn)*(sys.cn)*(sys.cn)];
     pair(&sys);
+    
     sort(&sys,cel);
     
     for(int it=0;it<sys.pair.size();++it){
-        if(sys.pair[it]>sys.cn*sys.cn*sys.cn-1) exit(1);
+        if(sys.pair[it]>sys.cn*sys.cn*sys.cn-1){
+            printf("wrong idx %d\n",it);
+            exit(1);
+        }
     }
     
-    if(cel[4].idx[0]==1 && cel[22].idx[0]==2 && cel[26].idx[0]==0 && sys.pair[1]==26){
-        free(sys.rx);free(sys.ry);free(sys.rz);delete [] cel;
+    if(cel[4].idx[0]==1 && cel[22].idx[0]==2 && cel[26].idx[0]==0 && sys.pair[1]==22){
+        
+        free(sys.rx);free(sys.ry);free(sys.rz); delete [] cel;
         return 0;
     }
-    free(sys.rx);free(sys.ry);free(sys.rz);delete [] cel;
+    
+    free(sys.rx);free(sys.ry);free(sys.rz); delete [] cel;
+    printf("wrong allocation\n");
     exit(1);
 }

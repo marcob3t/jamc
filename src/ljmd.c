@@ -94,7 +94,6 @@ int main(int argc, char **argv)
     /* main MD loop */
     
     for(sys.nfi=1; sys.nfi <= sys.nsteps; ++sys.nfi) {
-        printf("at %d\n",sys.nfi);
         /* propagate system and recompute energies */
 #ifdef TIMING
         velverlet_1(&sys);

@@ -42,44 +42,44 @@ void pair(mdsys_t *sys) {
     for(i=0;i<sys->cn;++i){
         for(j=0;j<sys->cn;++j){
             for(k=0;k<sys->cn;++k){
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i-1,j-1,k-1));
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i-1,j-1,k-1));
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i-1,j-1,k));
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i-1,j-1,k));
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i-1,j-1,k+1));//1 line
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i-1,j-1,k+1));//1 line
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i-1,j,k-1));
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i-1,j,k-1));
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i-1,j,k));
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i-1,j,k));
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i-1,j,k+1));//2 line
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i-1,j,k+1));//2 line
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i-1,j+1,k-1));
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i-1,j+1,k-1));
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i-1,j+1,k));
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i-1,j+1,k));
                 
                 sys->pair.push_back(index3d(sys,i,j,k));
                 sys->pair.push_back(index3d(sys,i-1,j+1,k+1));//1 facard
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i,j-1,k-1));
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i,j-1,k-1));
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i,j-1,k));
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i,j-1,k));
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i,j-1,k+1));//1 line
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i,j-1,k+1));//1 line
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i,j,k-1));
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i,j,k-1));
                 
                 sys->pair.push_back(index3d(sys,i,j,k));
                 sys->pair.push_back(index3d(sys,i,j,k+1));//2 line
@@ -93,8 +93,8 @@ void pair(mdsys_t *sys) {
                 sys->pair.push_back(index3d(sys,i,j,k));
                 sys->pair.push_back(index3d(sys,i,j+1,k+1));//1 facard
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i+1,j-1,k-1));
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i+1,j-1,k-1));
                 
                 sys->pair.push_back(index3d(sys,i,j,k));
                 sys->pair.push_back(index3d(sys,i+1,j-1,k));
@@ -127,11 +127,8 @@ void pair(mdsys_t *sys) {
 
 // translate cell (i,j,k) to cel position but with boundary fixing
 int index3d(mdsys_t *sys, int i, int j, int k) {
-    while (i>sys->cn-1) i -= sys->cn;
-    while (i<0) i += sys->cn;
-    while (j>sys->cn-1) j -= sys->cn;
-    while (j<0) j += sys->cn;
-    while (k>sys->cn-1) k -= sys->cn;
-    while (k<0) k += sys->cn;
+    i %= sys->cn;if(i<0) i += sys->cn;
+    j %= sys->cn;if(j<0) j += sys->cn;
+    k %= sys->cn;if(k<0) k += sys->cn;
     return k+sys->cn*(j+i*sys->cn);
 }

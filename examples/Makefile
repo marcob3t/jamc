@@ -12,7 +12,7 @@ check: ../test_out.x ../test_in.x ../test_ekin.x ../test_cell.x ../test_velverle
 	../test_in.x <argon_108.inp
 	cmp test_in.dat ../reference/test_in.dat || exit 1
 	../test_ekin.x
-	#../test_force.x
+	../test_force.x
 	../test_cell.x
 	../test_velverlet_1.x
 	cmp test_velverlet_1.dat ../reference/test_velverlet_1.dat || exit 1

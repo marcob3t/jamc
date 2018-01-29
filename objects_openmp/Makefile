@@ -1,6 +1,6 @@
 # -*- Makefile -*-
 SHELL=/bin/sh
-CC=g++
+CC=g++-7
 CFLAGS=-Wall -g -O3 -ffast-math -fexpensive-optimizations -fomit-frame-pointer -fopenmp -DCHUNKSIZE=9 #-DTIMING #-pg 
 LDLIBS=-lm
 
