@@ -30,17 +30,31 @@ int main(int argc, char **argv) {
     cell_t* cel = new cell_t[(sys.cn)*(sys.cn)*(sys.cn)];
     pair(&sys);
     
+    int pair_count=0;
+    for(int it=0;it<sys.pair.size();it+=2){
+        pair_count+=1;
+        //printf("pairs %d, %d\n",sys.pair[it],sys.pair[it+1]);
+    }
+    // non-repeatable Permutation of 27 to 2 should be 351
+    if(pair_count!=351) exit(1);
+    
     sort(&sys,cel);
     
-    for(int it=0;it<sys.pair.size();++it){
-        if(sys.pair[it]>sys.cn*sys.cn*sys.cn-1){
-            printf("wrong idx %d\n",it);
-            exit(1);
-        }
+    sys.rx[0] = -6; sys.ry[0] = 0; sys.rz[0] = 0;
+    
+    sort(&sys,cel);
+    
+    int count = 0;
+    for(int it=0;it<sys.cn*sys.cn*sys.cn;++it){
+        count += cel[it].idx.size();
+        //printf("cell id %d, load: %lu\n",it,cel[it].idx.size());
+    }
+    if(count != sys.natoms) {
+        printf("wrong cell load\n");
+        exit(1);
     }
     
-    if(cel[4].idx[0]==1 && cel[22].idx[0]==2 && cel[26].idx[0]==0 && sys.pair[1]==22){
-        
+    if(cel[4].idx[0]==1 && cel[22].idx[0]==0 && cel[22].idx[1]==2 && cel[26].idx.size()==0){
         free(sys.rx);free(sys.ry);free(sys.rz); delete [] cel;
         return 0;
     }

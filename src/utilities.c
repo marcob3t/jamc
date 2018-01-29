@@ -36,89 +36,200 @@ double stamp(){
     return tv.tv_sec*1e+3 + tv.tv_usec*1e-3;
 }
 
-// pair up cells in sys
+// pair up cells in sys, looking to 13 neighbors but exclude circling back to itself
 void pair(mdsys_t *sys) {
     int i,j,k;
     for(i=0;i<sys->cn;++i){
         for(j=0;j<sys->cn;++j){
             for(k=0;k<sys->cn;++k){
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j-1,k-1));
+                int cue;
+                int id = index3d(sys,i,j,k);
+                std::vector<int> local_pair;
+                local_pair.push_back(id);
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j-1,k));
+                //sys->pair.push_back(index3d(sys,i-1,j-1,k-1));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j-1,k+1));//1 line
+                //sys->pair.push_back(index3d(sys,i-1,j-1,k));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j,k-1));
+                //sys->pair.push_back(index3d(sys,i-1,j-1,k+1));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j,k));
+                //sys->pair.push_back(index3d(sys,i-1,j,k-1));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j,k+1));//2 line
+                //sys->pair.push_back(index3d(sys,i-1,j,k));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j+1,k-1));
+                //sys->pair.push_back(index3d(sys,i-1,j,k+1));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j+1,k));
-                
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i-1,j+1,k+1));//1 facard
+                //sys->pair.push_back(index3d(sys,i-1,j+1,k-1));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i,j-1,k-1));
+                //sys->pair.push_back(index3d(sys,i-1,j+1,k));//x
+                
+                int idp = index3d(sys,i-1,j+1,k+1);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) {cue*=0;}
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i,j-1,k-1));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i,j-1,k));
+                //sys->pair.push_back(index3d(sys,i,j-1,k));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i,j-1,k+1));//1 line
+                //sys->pair.push_back(index3d(sys,i,j-1,k+1));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i,j,k-1));
-                
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i,j,k+1));//2 line
-                
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i,j+1,k-1));
-                
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i,j+1,k));
-                
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i,j+1,k+1));//1 facard
+                //sys->pair.push_back(index3d(sys,i,j,k-1));//x
                 
                 //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i+1,j-1,k-1));
+                //sys->pair.push_back(index3d(sys,i,j,k));//x
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i+1,j-1,k));
+                idp = index3d(sys,i,j,k+1);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i+1,j-1,k+1));//1 line
+                idp = index3d(sys,i,j+1,k-1);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i+1,j,k-1));
+                idp = index3d(sys,i,j+1,k);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i+1,j,k));
+                idp = index3d(sys,i,j+1,k+1);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i+1,j,k+1));//2 line
+                //sys->pair.push_back(index3d(sys,i,j,k));
+                //sys->pair.push_back(index3d(sys,i+1,j-1,k-1));//x
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i+1,j+1,k-1));
+                idp = index3d(sys,i+1,j-1,k);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i+1,j+1,k));
+                idp = index3d(sys,i+1,j-1,k+1);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
                 
-                sys->pair.push_back(index3d(sys,i,j,k));
-                sys->pair.push_back(index3d(sys,i+1,j+1,k+1));//1 facard
+                idp = index3d(sys,i+1,j,k-1);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
+                
+                idp = index3d(sys,i+1,j,k);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
+                
+                idp = index3d(sys,i+1,j,k+1);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
+                
+                idp = index3d(sys,i+1,j+1,k-1);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
+                
+                idp = index3d(sys,i+1,j+1,k);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
+                
+                idp = index3d(sys,i+1,j+1,k+1);
+                cue = 1;
+                for(unsigned it=0;it<local_pair.size();++it){
+                    if(idp==local_pair[it]) cue*=0;
+                }
+                if(cue){
+                    sys->pair.push_back(id);
+                    sys->pair.push_back(idp);
+                    local_pair.push_back(idp);
+                }
             }
         }
     }
@@ -127,8 +238,11 @@ void pair(mdsys_t *sys) {
 
 // translate cell (i,j,k) to cel position but with boundary fixing
 int index3d(mdsys_t *sys, int i, int j, int k) {
-    i %= sys->cn;if(i<0) i += sys->cn;
-    j %= sys->cn;if(j<0) j += sys->cn;
-    k %= sys->cn;if(k<0) k += sys->cn;
+    while(i>sys->cn-1) i -= sys->cn;
+    while(i<0) i += sys->cn;
+    while(j>sys->cn-1) j -= sys->cn;
+    while(j<0) j += sys->cn;
+    while(k>sys->cn-1) k -= sys->cn;
+    while(k<0) k += sys->cn;
     return k+sys->cn*(j+i*sys->cn);
 }
