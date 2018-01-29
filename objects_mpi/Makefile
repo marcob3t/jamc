@@ -1,7 +1,7 @@
 # -*- Makefile -*-
 SHELL=/bin/sh
 CC=mpic++
-CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -DUSE_MPI #-DTIMING -pg
+CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -DUSE_MPI #-DTIMING #-pg
 LDLIBS=-lm
 
 # list of source files

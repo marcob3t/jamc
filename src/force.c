@@ -294,6 +294,13 @@ void force(mdsys_t *sys)
     double rx,ry,rz;
     int i,j;
     double epot=0.0; // needed for reduction with openmp
+    int nprocs = 1;
+    int rank = 0;
+
+#ifdef USE_MPI
+    MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+#endif /* USE_MPI */    
 
     // zero energy and forces
     azzero(sys->fx,sys->natoms);
@@ -314,7 +321,7 @@ void force(mdsys_t *sys)
 #endif
 #pragma omp for schedule(dynamic,CHUNKSIZE)
 #endif
-        for(i=0; i < (sys->natoms); ++i) {
+      for(i=rank; i < (sys->natoms); i+=nprocs) {
             for(j=i+1; j < (sys->natoms); ++j) {
                 // particles have no interactions with themselves
 
