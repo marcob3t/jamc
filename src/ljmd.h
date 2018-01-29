@@ -12,8 +12,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include <ctype.h>
 #include <vector>
+#include <ctype.h>
+#ifdef USE_MPI
+#include <mpi.h>
+#endif
 
 /* generic file- or pathname buffer length */
 #define BLEN 200
@@ -76,10 +79,12 @@ double stamp();
 
 
 //*********************** CELL *********
+
 // cell structure
 struct _mdcell {
     std::vector<int> idx;
 };
+
 typedef struct _mdcell cell_t;
 
 /* pair up cell indecies */

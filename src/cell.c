@@ -34,9 +34,6 @@ void cell_force(mdsys_t *sys,cell_t *cell){
     double c12 = sys->epsilon*pow(sys->sigma,12);
     // LOOP THROUGH CELLS' OWN ELEMENTS
     for(int it=0;it<sys->cn*sys->cn*sys->cn;++it){
-        //***
-        //printf("cell id %d\n",it);
-        //***
         for(unsigned e1=0;e1<cell[it].idx.size();++e1){
             int i = cell[it].idx[e1];
             for(unsigned e2=e1+1;e2<cell[it].idx.size();++e2){
@@ -56,21 +53,17 @@ void cell_force(mdsys_t *sys,cell_t *cell){
                 r6 = rsq_inv*rsq_inv*rsq_inv;
                 ffac = (48*c12*r6-24*c6)*r6*rsq_inv;
                 sys->epot += 4*r6*(c12*r6-c6);
-                sys->fx[i] += rx*ffac;sys->fx[j] -= rx*ffac;
-                sys->fy[i] += ry*ffac;sys->fy[j] -= ry*ffac;
-                sys->fz[i] += rz*ffac;sys->fz[j] -= rz*ffac;
+                sys->fx[i] += rx*ffac; sys->fx[j] -= rx*ffac;
+                sys->fy[i] += ry*ffac; sys->fy[j] -= ry*ffac;
+                sys->fz[i] += rz*ffac; sys->fz[j] -= rz*ffac;
             }
         }
     }
-    
     // LOOP THROUGH CELL PAIRS
     for(unsigned it=0;it<sys->pair.size();it+=2) {
         // loop through cell pairs
         int c1 = sys->pair[it];
         int c2 = sys->pair[it+1];
-        //***
-        //printf("cell pair %d, %d\n",c1,c2);
-        //***
         for(unsigned e1=0;e1<cell[c1].idx.size();++e1){
             // element in cell 1
             int i = cell[c1].idx[e1];
@@ -93,16 +86,10 @@ void cell_force(mdsys_t *sys,cell_t *cell){
                 r6 = rsq_inv*rsq_inv*rsq_inv;
                 ffac = (48*c12*r6-24*c6)*r6*rsq_inv;
                 sys->epot += 4*r6*(c12*r6-c6);
-                sys->fx[i] += rx*ffac;sys->fx[j] -= rx*ffac;
-                sys->fy[i] += ry*ffac;sys->fy[j] -= ry*ffac;
-                sys->fz[i] += rz*ffac;sys->fz[j] -= rz*ffac;
+                sys->fx[i] += rx*ffac; sys->fx[j] -= rx*ffac;
+                sys->fy[i] += ry*ffac; sys->fy[j] -= ry*ffac;
+                sys->fz[i] += rz*ffac; sys->fz[j] -= rz*ffac;
             }// c1
         }// c2
     }// cell pairs
-    //***
-    //printf("pairs %lu\n",sys->pair.size()/2);
-    //exit(1);
-    //***
 }
-
-

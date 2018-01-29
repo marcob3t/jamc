@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make
+make serial
 cd examples
 rm gmon.out
 ../ljmd-serial.x < argon_108.inp
