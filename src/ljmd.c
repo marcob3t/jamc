@@ -1,5 +1,4 @@
 #include "ljmd.h"
-#include "cell.h"
 #ifdef _OPENMP
 #include "omp.h"
 #endif
@@ -8,7 +7,9 @@
 int main(int argc, char **argv) 
 {
     int nprint, i;
+#ifdef _USE_MPI
     int nprocs = 1;
+#endif
     int rank = 0;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
     mdsys_t sys; FILE *fp;

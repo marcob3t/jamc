@@ -2,7 +2,6 @@
 #include <math.h>
 #include "ljmd.h"
 #include <vector>
-#include "cell.h"
 
 // translate cell (i,j,k) to cell position
 int index3d(mdsys_t *sys, int i, int j, int k) {

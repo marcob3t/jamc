@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <vector>
 #include <ctype.h>
 #ifdef USE_MPI
 #include <mpi.h>
@@ -73,5 +74,19 @@ void output(mdsys_t *sys, FILE *erg, FILE *traj);
 
 /* timer in ms */
 double stamp();
+
+
+//*** cell list
+
+// cell structure
+struct _mdcell {
+    std::vector<int> idx;
+};
+
+typedef struct _mdcell cell_t;
+
+int index3d(mdsys_t *sys, int i, int j, int k);
+
+void sort(mdsys_t *sys, cell_t *cel);
 
 #endif
