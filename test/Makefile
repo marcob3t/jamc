@@ -20,15 +20,11 @@ HEADS=$(wildcard $(INCDIR)*.h)
 default: $(EXE)
 
 # linker rule
-$(EXEDIR)/%.x: %.o $(FOBJ) $(SRCDIR)/cell.o
+$(EXEDIR)/%.x: %.o $(FOBJ)
 	$(CC) -o $@ $(CFLAGS) $^ $(LDLIBS)
 
 # compile true source files
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADS)
-	$(CC) -c $(CFLAGS) $< -o $@
-
-# special for cell
-$(OBJDIR)/cell.o: $(SRCDIR)/%.cc $(HEADS)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 # compile testing source file
