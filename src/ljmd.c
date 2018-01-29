@@ -1,5 +1,8 @@
 #include "ljmd.h"
 #include "cell.h"
+#ifdef _OPENMP
+#include "omp.h"
+#endif
 
 /* main */
 int main(int argc, char **argv) 
@@ -7,6 +10,11 @@ int main(int argc, char **argv)
     int nprint, i;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
     mdsys_t sys; FILE *fp;
+#ifdef _OPENMP
+    int nthds = omp_get_max_threads(); // openmp
+#else
+    int nthds = 1;
+#endif
 #ifdef TIMING
     double timer = 0; // for recording time
 #endif
@@ -41,9 +49,9 @@ int main(int argc, char **argv)
     sys.vx=(double *)malloc(sys.natoms*sizeof(double));
     sys.vy=(double *)malloc(sys.natoms*sizeof(double));
     sys.vz=(double *)malloc(sys.natoms*sizeof(double));
-    sys.fx=(double *)malloc(sys.natoms*sizeof(double));
-    sys.fy=(double *)malloc(sys.natoms*sizeof(double));
-    sys.fz=(double *)malloc(sys.natoms*sizeof(double));
+    sys.fx=(double *)malloc(sys.natoms*nthds*sizeof(double));
+    sys.fy=(double *)malloc(sys.natoms*nthds*sizeof(double));
+    sys.fz=(double *)malloc(sys.natoms*nthds*sizeof(double));
 
     /* read restart */
     fp=fopen(restfile,"r");
