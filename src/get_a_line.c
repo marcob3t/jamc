@@ -1,4 +1,5 @@
 #include "ljmd.h"
+#include <stdlib.h>
 
 /* helper function: read a line and then return
    the first string with whitespace stripped off */

@@ -1,7 +1,7 @@
 # -*- Makefile -*-
 SHELL=/bin/sh
 CC=g++
-CFLAGS=-Wall -g -fomit-frame-pointer -O3 -ffast-math -fexpensive-optimizations #-DTIMING #-pg
+CFLAGS=-Wall -g -fomit-frame-pointer -O3 -ffast-math -fexpensive-optimizations -DCELL #-DTIMING #-pg
 LDLIBS=-lm
 
 # list of source files
@@ -17,7 +17,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
 # special for cell
-$(OBJDIR)/cell.o: $(SRCDIR)/cell.cc $(SRCDIR)/cell.h
+$(OBJDIR)/cell.o: $(SRCDIR)/cell.cc
 	$(CC) -c $(CFLAGS) -I$(SRCDIR) -I. $< -o $@
 
 # linker rule

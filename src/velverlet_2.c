@@ -1,5 +1,7 @@
 #include "ljmd.h"
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 
 /* velocity verlet */
 void velverlet_2(mdsys_t *sys)

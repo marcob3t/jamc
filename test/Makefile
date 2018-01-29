@@ -1,7 +1,7 @@
 # -*- Makefile for unit test -*-
 SHELL=/bin/sh
 CC=g++
-CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -fexpensive-optimizations
+CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -fexpensive-optimizations -DCELL
 LDLIBS=-lm
 INC= -I$(INCDIR) -I.
 

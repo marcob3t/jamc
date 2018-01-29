@@ -1,5 +1,5 @@
 #include "ljmd.h"
-#include "cell.h"
+#include <stdio.h>
 
 /* main */
 int main(int argc, char **argv) 
@@ -44,7 +44,14 @@ int main(int argc, char **argv)
     sys.fx=(double *)malloc(sys.natoms*sizeof(double));
     sys.fy=(double *)malloc(sys.natoms*sizeof(double));
     sys.fz=(double *)malloc(sys.natoms*sizeof(double));
-
+    
+#ifdef CELL
+    sys.cn = floor(sys.box/sys.rcut);
+    sys.cl = sys.box/sys.cn;
+    cell_t* cel = new cell_t[(sys.cn)*(sys.cn)*(sys.cn)];
+    pair(&sys);// only need to be called once
+#endif
+    
     /* read restart */
     fp=fopen(restfile,"r");
     if(fp) {
@@ -62,10 +69,15 @@ int main(int argc, char **argv)
         perror("cannot read restart file");
         return 3;
     }
-
+    
     /* initialize forces and energies.*/
     sys.nfi=0;
+#ifdef CELL
+    sort(&sys,cel);
+    cell_force(&sys,cel);
+#else
     force(&sys);
+#endif
     ekin(&sys);
     
 #ifndef TIMING
@@ -82,20 +94,30 @@ int main(int argc, char **argv)
     /* main MD loop */
     
     for(sys.nfi=1; sys.nfi <= sys.nsteps; ++sys.nfi) {
-        
+        printf("at %d\n",sys.nfi);
         /* propagate system and recompute energies */
 #ifdef TIMING
         velverlet_1(&sys);
         timer -= stamp();
+#ifdef CELL
+        sort(&sys,cel);
+        cell_force(&sys,cel);
+#else
         force(&sys);
+#endif
         timer += stamp();
         velverlet_2(&sys);
 #else
-        /* write output, if requested */
+        // write output, if requested
         if ((sys.nfi % nprint) == 0)
             output(&sys, erg, traj);
         velverlet_1(&sys);
+#ifdef CELL
+        sort(&sys,cel);
+        cell_force(&sys,cel);
+#else
         force(&sys);
+#endif
         velverlet_2(&sys);
 #endif
         ekin(&sys);
@@ -120,6 +142,9 @@ int main(int argc, char **argv)
     free(sys.fx);
     free(sys.fy);
     free(sys.fz);
-
+    
+#ifdef CELL
+    delete [] cel;
+#endif
     return 0;
 }

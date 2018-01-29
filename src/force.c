@@ -1,5 +1,7 @@
 #include "ljmd.h"
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 /* WE INCLUDE ALL HISTORICAL VERSIONS OF THIS FUNCTION */
 
 /* original */
@@ -44,6 +46,7 @@
  }
  }
  */
+
 
 /* aggressive truncate */
 /*
@@ -116,7 +119,6 @@ void force(mdsys_t *sys)
     }
 }
 */
-
 
 /* Newton */
 /*
@@ -205,6 +207,7 @@ void force(mdsys_t *sys)
 
 
 /* omp aggressive truncate */
+
 void force(mdsys_t *sys)
 {
     double rsq,rsq_inv,r6,ffac;
@@ -283,3 +286,5 @@ void force(mdsys_t *sys)
     }
     sys->epot = epot;
 }
+
+

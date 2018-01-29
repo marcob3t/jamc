@@ -20,7 +20,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
 # special for cell
-$(OBJDIR)/cell.o: $(SRCDIR)/cell.cc $(SRCDIR)/cell.h
+$(OBJDIR)/cell.o: $(SRCDIR)/cell.cc
 	$(CC) -c $(CFLAGS) -I$(SRCDIR) -I. $< -o $@
 
 # linker rule
