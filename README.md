@@ -160,6 +160,20 @@ force function accumulated timing:
 |9361.658057|7.82|1/9|+agg. trunc|
 |8516.886572|8.60|1/10|+agg. trunc|
 
+ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), first taken as best serial
+|argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
+|--------------|--------|---------------------|-------|
+|48112|1.00|1/1|+agg. trunc newt(atomic)|
+|36787|1.31|1/2|+agg. trunc newt(atomic)|
+|29179|1.65|1/3|+agg. trunc newt(atomic)|
+|25873|1.86|1/4|+agg. trunc newt(atomic)|
+|21927|2.19|1/5|+agg. trunc newt(atomic)|
+|19927|2.41|1/6|+agg. trunc newt(atomic)|
+|17925|2.68|1/7|+agg. trunc newt(atomic)|
+|16813|2.86|1/8|+agg. trunc newt(atomic)|
+|15510|3.10|1/9|+agg. trunc newt(atomic)|
+|14796|3.25|1/10|+agg. trunc newt(atomic)|
+
 |argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
 |--------------|--------|---------------------|-------|
 |||1/10|+Newton +agg.|

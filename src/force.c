@@ -204,7 +204,8 @@ void force(mdsys_t *sys)
 */
 
 
-/* omp aggressive truncate */
+/* omp aggressive */
+/*
 void force(mdsys_t *sys)
 {
     double rsq,rsq_inv,r6,ffac;
@@ -278,6 +279,84 @@ void force(mdsys_t *sys)
                 sys->fx[i] += rx*ffac;
                 sys->fy[i] += ry*ffac;
                 sys->fz[i] += rz*ffac;
+            }
+        }
+    }
+    sys->epot = epot;
+}
+*/
+
+
+/* newton omp aggressive with atomic */
+void force(mdsys_t *sys)
+{
+    double rsq,rsq_inv,r6,ffac;
+    double rx,ry,rz;
+    int i,j;
+    double epot=0.0; // needed for reduction with openmp
+
+    // zero energy and forces
+    azzero(sys->fx,sys->natoms);
+    azzero(sys->fy,sys->natoms);
+    azzero(sys->fz,sys->natoms);
+    double boxby2 = 0.5*sys->box;// pre-calculate
+    double rcutsq = sys->rcut*sys->rcut;// pre-calculate, take square
+    double c6 = sys->epsilon*pow(sys->sigma,6);
+    double c12 = sys->epsilon*pow(sys->sigma,12);
+
+#ifdef _OPENMP
+#pragma omp parallel private(i,j,rx,ry,rz,rsq,rsq_inv,r6,ffac) reduction(+:epot)
+#endif
+    {
+#ifdef _OPENMP
+#ifndef CHUNKSIZE
+#define CHUNKSIZE=9
+#endif
+#pragma omp for schedule(dynamic,CHUNKSIZE)
+#endif
+        for(i=0; i < (sys->natoms); ++i) {
+            for(j=i+1; j < (sys->natoms); ++j) {
+                // particles have no interactions with themselves
+
+                // get distance between particle i and j
+                rx=pbc(sys->rx[i] - sys->rx[j], boxby2);
+                rsq = rx*rx;
+                if(rsq>rcutsq) continue;
+                ry=pbc(sys->ry[i] - sys->ry[j], boxby2);
+                rsq += ry*ry;
+                if(rsq>rcutsq) continue;
+                rz=pbc(sys->rz[i] - sys->rz[j], boxby2);
+                rsq += rz*rz;
+                if(rsq>rcutsq) continue;
+
+                rsq_inv = 1.0/rsq;
+                r6 = rsq_inv*rsq_inv*rsq_inv;
+                ffac = (48*c12*r6-24*c6)*r6*rsq_inv;
+                epot += 4*r6*(c12*r6-c6);
+#ifdef _OPENMP
+#pragma omp atomic update
+#endif
+                sys->fx[i] += rx*ffac;
+#ifdef _OPENMP
+#pragma omp atomic update
+#endif
+                sys->fx[j] -= rx*ffac;
+#ifdef _OPENMP
+#pragma omp atomic update
+#endif
+                sys->fy[i] += ry*ffac;
+#ifdef _OPENMP
+#pragma omp atomic update
+#endif
+                sys->fy[j] -= ry*ffac;
+#ifdef _OPENMP
+#pragma omp atomic update
+#endif
+                sys->fz[i] += rz*ffac;
+#ifdef _OPENMP
+#pragma omp atomic update
+#endif
+                sys->fz[j] -= rz*ffac;
             }
         }
     }
