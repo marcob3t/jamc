@@ -13,6 +13,9 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
+#ifdef USE_MPI
+#include <mpi.h>
+#endif
 
 /* generic file- or pathname buffer length */
 #define BLEN 200
