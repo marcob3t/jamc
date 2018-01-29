@@ -36,200 +36,59 @@ double stamp(){
     return tv.tv_sec*1e+3 + tv.tv_usec*1e-3;
 }
 
-// pair up cells in sys, looking to 13 neighbors but exclude circling back to itself
 void pair(mdsys_t *sys) {
-    int i,j,k;
-    for(i=0;i<sys->cn;++i){
-        for(j=0;j<sys->cn;++j){
-            for(k=0;k<sys->cn;++k){
-                int cue;
-                int id = index3d(sys,i,j,k);
-                std::vector<int> local_pair;
-                local_pair.push_back(id);
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j-1,k-1));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j-1,k));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j-1,k+1));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j,k-1));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j,k));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j,k+1));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j+1,k-1));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i-1,j+1,k));//x
-                
-                int idp = index3d(sys,i-1,j+1,k+1);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) {cue*=0;}
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i,j-1,k-1));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i,j-1,k));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i,j-1,k+1));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i,j,k-1));//x
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i,j,k));//x
-                
-                idp = index3d(sys,i,j,k+1);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                idp = index3d(sys,i,j+1,k-1);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                idp = index3d(sys,i,j+1,k);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                idp = index3d(sys,i,j+1,k+1);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                //sys->pair.push_back(index3d(sys,i,j,k));
-                //sys->pair.push_back(index3d(sys,i+1,j-1,k-1));//x
-                
-                idp = index3d(sys,i+1,j-1,k);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                idp = index3d(sys,i+1,j-1,k+1);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                idp = index3d(sys,i+1,j,k-1);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                idp = index3d(sys,i+1,j,k);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                idp = index3d(sys,i+1,j,k+1);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                idp = index3d(sys,i+1,j+1,k-1);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                idp = index3d(sys,i+1,j+1,k);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
-                
-                idp = index3d(sys,i+1,j+1,k+1);
-                cue = 1;
-                for(unsigned it=0;it<local_pair.size();++it){
-                    if(idp==local_pair[it]) cue*=0;
-                }
-                if(cue){
-                    sys->pair.push_back(id);
-                    sys->pair.push_back(idp);
-                    local_pair.push_back(idp);
-                }
+    int n = sys->cn;
+    int total_cell = n*n*n;
+    for(int c1=0;c1<total_cell;++c1){
+        int k1 = c1%(n);
+        int j1 = ((c1-k1)/n)%n;
+        int i1 = (c1-j1*n-k1)/(n*n);
+        for(int c2=c1+1;c2<total_cell;++c2){
+            // calculate distance between two cells
+            int k2 = c2%(n);
+            int j2 = ((c2-k2)/n)%n;
+            int i2 = (c2-j2*n-k2)/(n*n);
+            // exclude rule, 26 different periodic mirroring cases
+            int dk = k1-k2; int dj = j1-j2; int di = i1-i2;
+            int dist = dk*dk+dj*dj+di*di;
+            if(dist<4){
+                sys->pair.push_back(c1);
+                sys->pair.push_back(c2);
+            }
+            // pierodic in i, 2 cases
+            else if (dist+n*n+2*n*di<4 || dist+n*n-2*n*di<4){
+                sys->pair.push_back(c1);
+                sys->pair.push_back(c2);
+            }
+            // pierodic in j, 2 cases
+            else if (dist+n*n+2*n*dj<4 || dist+n*n-2*n*dj<4){
+                sys->pair.push_back(c1);
+                sys->pair.push_back(c2);
+            }
+            // pierodic in k, 2 cases
+            else if (dist+n*n+2*n*dk<4 || dist+n*n-2*n*dk<4){
+                sys->pair.push_back(c1);
+                sys->pair.push_back(c2);
+            }
+            // pierodic in i,j, 4 cases
+            else if (dist+2*n*n+2*n*(di+dj)<4 || dist+2*n*n+2*n*(di-dj)<4 || dist+2*n*n+2*n*(dj-di)<4|| dist+2*n*n-2*n*(di+dj)<4){
+                sys->pair.push_back(c1);
+                sys->pair.push_back(c2);
+            }
+            // pierodic in i,k, 4 cases
+            else if (dist+2*n*n+2*n*(di+dk)<4 || dist+2*n*n+2*n*(di-dk)<4 || dist+2*n*n+2*n*(dk-di)<4|| dist+2*n*n-2*n*(di+dk)<4){
+                sys->pair.push_back(c1);
+                sys->pair.push_back(c2);
+            }
+            // pierodic in j,k, 4 cases
+            else if (dist+2*n*n+2*n*(dk+dj)<4 || dist+2*n*n+2*n*(dk-dj)<4 || dist+2*n*n+2*n*(dj-dk)<4|| dist+2*n*n-2*n*(dk+dj)<4){
+                sys->pair.push_back(c1);
+                sys->pair.push_back(c2);
+            }
+            // peirodic in ijk, 8 cases
+            else if (dist+3*n*n+2*n*(dk+dj+di)<4 || dist+3*n*n+2*n*(dk+dj-di)<4 || dist+3*n*n+2*n*(-dk+dj+di)<4 || dist+3*n*n+2*n*(dk-dj+di)<4 || dist+3*n*n+2*n*(-dk-dj+di)<4 || dist+3*n*n+2*n*(-dk+dj-di)<4 || dist+3*n*n+2*n*(dk-dj-di)<4 || dist+3*n*n-2*n*(dk+dj+di)<4){
+                sys->pair.push_back(c1);
+                sys->pair.push_back(c2);
             }
         }
     }

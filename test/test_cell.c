@@ -33,7 +33,6 @@ int main(int argc, char **argv) {
     int pair_count=0;
     for(int it=0;it<sys.pair.size();it+=2){
         pair_count+=1;
-        //printf("pairs %d, %d\n",sys.pair[it],sys.pair[it+1]);
     }
     // non-repeatable Permutation of 27 to 2 should be 351
     if(pair_count!=351) exit(1);
