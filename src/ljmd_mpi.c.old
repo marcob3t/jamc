@@ -250,9 +250,9 @@ int main(int argc, char **argv)
     free(sys.fy);
     free(sys.fz);
 
-    #ifdef USE_MPI
+#ifdef USE_MPI
     MPI_Finalize();
-    #endif /* USE_MPI */
+#endif /* USE_MPI */
 
     return 0;
 }

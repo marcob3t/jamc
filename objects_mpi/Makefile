@@ -1,30 +1,31 @@
-# -*- Makefile -*-
+# -*- Makefile for unit test -*-
 SHELL=/bin/sh
 CC=mpic++
-CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -DUSE_MPI #-DTIMING #-pg
+CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -DUSE_MPI #-DTIMING
 LDLIBS=-lm
+INC= -I$(INCDIR) -I.
 
-# list of source files
+OBJDIR=.
 SRCDIR=../src
-OBJDIR=./
+INCDIR=../src
 SOURCES= $(shell find $(SRCDIR) -type f -name *.c)
-OBJ= $(patsubst $(SRCDIR)/%,./%,$(SOURCES:.c=.o))
+
+OBJ= $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SOURCES:.c=.o))
+HEADS=$(wildcard $(INCDIR)*.h)
 
 default: ../ljmd-mpi.x
 
-clean:
-	rm -f *.mod *.o ../ljmd-mpi.x
+# linker rule
+../ljmd-mpi.x: $(OBJ) $(SRCDIR)/cell.o
+	$(CC) -o $@ $(CFLAGS) $^ $(LDLIBS)
 
-# compilation pattern rule for objects
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
+# compile true source files
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADS)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 # special for cell
-$(OBJDIR)/cell.o: $(SRCDIR)/cell.cc $(SRCDIR)/cell.h
-	$(CC) -c $(CFLAGS) -I$(SRCDIR) -I. $< -o $@
+$(OBJDIR)/cell.o: $(SRCDIR)/%.cc $(HEADS)
+	$(CC) -c $(CFLAGS) $< -o $@
 
-# linker rule
-../ljmd-mpi.x: $(OBJ) cell.o
-	$(CC) -o $@ $(CFLAGS) $^ $(LDLIBS)
-
-
+clean:
+	rm -f ../ljmd-mpi.x *.o

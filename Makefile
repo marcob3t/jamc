@@ -26,7 +26,7 @@ clean:
 	$(MAKE) $(MFLAGS) -C examples clean
 	$(MAKE) $(MFLAGS) -C test clean
 
-check: mpi #serial openmp unitest mpi
+check: serial openmp unitest mpi
 	$(MAKE) $(MFLAGS) -C examples check
-	make clean
+	#make clean
 

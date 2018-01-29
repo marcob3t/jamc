@@ -9,6 +9,7 @@ SRCDIR=../src
 OBJDIR=./
 SOURCES= $(shell find $(SRCDIR) -type f -name *.c)
 OBJ= $(patsubst $(SRCDIR)/%,./%,$(SOURCES:.c=.o))
+FOBJ= $(filter-out $(OBJDIR)/ljmd.o,$(OBJ))
 
 default: ../ljmd-serial.x
 
@@ -24,7 +25,7 @@ $(OBJDIR)/cell.o: $(SRCDIR)/cell.cc $(SRCDIR)/cell.h
 	$(CC) -c $(CFLAGS) -I$(SRCDIR) -I. $< -o $@
 
 # linker rule
-../ljmd-serial.x: $(OBJ) cell.o
+../ljmd-serial.x: $(FOBJ) cell.o
 	$(CC) -o $@ $(CFLAGS) $^ $(LDLIBS)
 
 
