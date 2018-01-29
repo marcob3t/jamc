@@ -4,7 +4,7 @@
 #include <vector>
 #include "cell.h"
 
-// translate cell (i,j,k) to cel position
+// translate cell (i,j,k) to cell position
 int index3d(mdsys_t *sys, int i, int j, int k) {
     return k+sys->cn*(j+i*sys->cn);
 }
@@ -17,7 +17,7 @@ void sort(mdsys_t *sys,cell_t *cel) {
         pos[0] = floor((sys->rx[i]+0.5*sys->box)/sys->cl);
         pos[1] = floor((sys->ry[i]+0.5*sys->box)/sys->cl);
         pos[2] = floor((sys->rz[i]+0.5*sys->box)/sys->cl);
-        // apply pierodic boundary condition
+        // apply periodic boundary condition
         for(j=0;j<3;++j) {
             while(pos[j]>(sys->cn-1)) {
                 pos[j] -= sys->cn;
@@ -30,4 +30,3 @@ void sort(mdsys_t *sys,cell_t *cel) {
         cel[cidx].idx.push_back(i);
     }
 }
-
