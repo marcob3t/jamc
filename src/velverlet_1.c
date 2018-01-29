@@ -1,10 +1,14 @@
 #include "ljmd.h"
+#include <omp.h>
 
 /* velocity verlet */
 void velverlet_1(mdsys_t *sys)
 {
     int i;
     double coef = 0.5*sys->dt/ (sys->redmass);
+#ifdef _OPENMP
+#pragma omp parallel for schedule(dynamic) private(i)
+#endif
     /* first part: propagate velocities by half and positions by full step */
     for (i=0; i<sys->natoms; ++i) {
         sys->vx[i] += coef * sys->fx[i] ;

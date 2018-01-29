@@ -5,9 +5,12 @@ SHELL=/bin/sh
 OBJ_SERIAL=$(SRC:src/%.f90=objects_serial/%.o)
 ############################################
 
-default: serial
+default: serial openmp
 
 serial:
+	$(MAKE) $(MFLAGS) -C objects_$@
+
+openmp:
 	$(MAKE) $(MFLAGS) -C objects_$@
 
 unitest:
@@ -15,9 +18,11 @@ unitest:
 
 clean:
 	$(MAKE) $(MFLAGS) -C objects_serial clean
+	$(MAKE) $(MFLAGS) -C objects_openmp clean
 	$(MAKE) $(MFLAGS) -C examples clean
 	$(MAKE) $(MFLAGS) -C test clean
 
-check: serial unitest
+check: serial openmp unitest
 	$(MAKE) $(MFLAGS) -C examples check
+	make clean
 
