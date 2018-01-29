@@ -1,33 +1,25 @@
 #include "ljmd.h"
 #include "cell.h"
-#ifdef _OPENMP
-#include "omp.h"
-#endif
 
 /* main */
 int main(int argc, char **argv) 
 {
     int nprint, i;
-    int nprocs = 1;
     int rank = 0;
+    int nprocs = 1;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
     mdsys_t sys; FILE *fp;
-#ifdef _OPENMP
-    int nthds = omp_get_max_threads(); // openmp
-#else
-    int nthds = 1;
-#endif
 #ifdef TIMING
     double timer = 0; // for recording time
-#endif
+#endif /* TIMING */
 
 #ifdef USE_MPI
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 #endif /* USE_MPI */
-
-
+    
+    
     // Initialize the struct to zero
     memset(&sys, 0, sizeof(sys));
 
@@ -68,9 +60,9 @@ int main(int argc, char **argv)
     sys.vx=(double *)malloc(sys.natoms*sizeof(double));
     sys.vy=(double *)malloc(sys.natoms*sizeof(double));
     sys.vz=(double *)malloc(sys.natoms*sizeof(double));
-    sys.fx=(double *)malloc(sys.natoms*nthds*sizeof(double));
-    sys.fy=(double *)malloc(sys.natoms*nthds*sizeof(double));
-    sys.fz=(double *)malloc(sys.natoms*nthds*sizeof(double));
+    sys.fx=(double *)malloc(sys.natoms*sizeof(double));
+    sys.fy=(double *)malloc(sys.natoms*sizeof(double));
+    sys.fz=(double *)malloc(sys.natoms*sizeof(double));
 
     /* read restart */
     if (rank == 0) {    
@@ -102,7 +94,7 @@ int main(int argc, char **argv)
     MPI_Bcast(sys.vy, sys.natoms, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(sys.vz, sys.natoms, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #endif /* USE_MPI */
-
+    
     /* initialize forces and energies.*/
     sys.nfi=0;
     force(&sys);
@@ -127,7 +119,7 @@ int main(int argc, char **argv)
     else {
       MPI_Reduce(&sys.epot, &sys.epot, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     }
-#endif /* USE_MPI */
+#endif /* USE_MPI */    
     
     ekin(&sys);
     
@@ -140,7 +132,7 @@ int main(int argc, char **argv)
       printf("     NFI            TEMP            EKIN                 EPOT              ETOT\n");
       output(&sys, erg, traj);
     }
-#endif /* TIMING */
+#endif /* TIMING */    
     
 
     /**************************************************/

@@ -9,6 +9,7 @@ SRCDIR=../src
 OBJDIR=./
 SOURCES= $(shell find $(SRCDIR) -type f -name *.c)
 OBJ= $(patsubst $(SRCDIR)/%,./%,$(SOURCES:.c=.o))
+#FOBJ= $(filter-out $(OBJDIR)/ljmd.o,$(OBJ))
 
 default: ../ljmd-serial.x
 
