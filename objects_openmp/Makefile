@@ -1,7 +1,7 @@
 # -*- Makefile -*-
 SHELL=/bin/sh
 CC=g++
-CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -fopenmp -DCHUNKSIZE=9 #-DTIMING #-pg 
+CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -fopenmp -DCHUNKSIZE=1 #-DTIMING #-pg 
 LDLIBS=-lm
 
 # list of source files
