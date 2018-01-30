@@ -6,8 +6,12 @@
 /* newton omp aggressive with replicated memory */
 void force(mdsys_t *sys)
 {
+    printf("called\n");
     double rsq,rsq_inv,r6,ffac;
     double rx,ry,rz;
+    //printf("%f\n",sys->rx[0]);
+    
+    
     int n,i,j,offset;
     double * fx, * fy, * fz; // local pointers for openmp
     double epot=0.0; // needed for reduction with openmp
