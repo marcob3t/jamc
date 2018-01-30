@@ -1,6 +1,6 @@
 # -*- Makefile -*-
 CC=g++
-CFLAGS=-Wall -g -fomit-frame-pointer -O3 -ffast-math -fexpensive-optimizations -DCELL #-DTIMING #-pg
+CFLAGS=-Wall -g -fomit-frame-pointer -O3 -ffast-math -fexpensive-optimizations -fPIC -DCELL #-DTIMING #-pg
 LDLIBS=-lm
 
 # list of source files
