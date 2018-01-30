@@ -122,6 +122,8 @@ int main(int argc, char **argv)
     
 #ifdef CELL
     cell_force(&sys, cel);
+#elif F_INTERLEAVED
+    force_interleaved(&sys);
 #elif F_INDEX_ARRAY
     force_index_array(&sys);
 #elif F_ATOMIC
@@ -163,6 +165,8 @@ int main(int argc, char **argv)
 	sort(&sys, cel);
 
 	cell_force(&sys, cel);
+#elif F_INTERLEAVED
+        force_interleaved(&sys);
 #elif F_INDEX_ARRAY
         force_index_array(&sys);
 #elif F_ATOMIC
@@ -193,6 +197,8 @@ int main(int argc, char **argv)
 	// Sort the particles inside the cells
 	sort(&sys, cel);
         cell_force(&sys, cel);
+#elif F_INTERLEAVED
+        force_interleaved(&sys);
 #elif F_INDEX_ARRAY
         force_index_array(&sys);
 #elif F_ATOMIC

@@ -69,6 +69,7 @@ void ekin(mdsys_t *sys);
 
 /* compute forces */
 void force(mdsys_t *sys);
+void force_interleaved(mdsys_t *sys);
 void force_index_array(mdsys_t *sys);
 void force_atomic(mdsys_t *sys);
 void force_basic(mdsys_t *sys);
