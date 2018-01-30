@@ -84,6 +84,7 @@ int main(int argc, char **argv)
     sys.fx=(double *)malloc(sys.natoms*nthds*sizeof(double));
     sys.fy=(double *)malloc(sys.natoms*nthds*sizeof(double));
     sys.fz=(double *)malloc(sys.natoms*nthds*sizeof(double));
+    
     // Only the master process will perform the verlet algorithm
     if (rank == 0) {
         sys.vx=(double *)malloc(sys.natoms*sizeof(double));
@@ -121,9 +122,15 @@ int main(int argc, char **argv)
     
 #ifdef CELL
     cell_force(&sys, cel);
+#elif F_INDEX_ARRAY
+    force_index_array(&sys);
+#elif F_ATOMIC
+    force_atomic(&sys);
+#elif F_BASIC
+    force_basic(&sys);
 #else
     force(&sys);
-#endif /* CELL */    
+#endif /* CELL AND F_INDEX_ARRAY */
     
     if (rank == 0)
         ekin(&sys);
@@ -146,23 +153,31 @@ int main(int argc, char **argv)
     for(sys.nfi=1; sys.nfi <= sys.nsteps; ++sys.nfi) {
         /* propagate system and recompute energies */
 #ifdef TIMING
-        velverlet_1(&sys);
+        if (rank == 0)
+            velverlet_1(&sys);
 
 	if (rank == 0)
-	  timer -= stamp();
+	    timer -= stamp();
 #ifdef CELL
 	// Sort the particles inside the cells
 	sort(&sys, cel);
 
 	cell_force(&sys, cel);
+#elif F_INDEX_ARRAY
+        force_index_array(&sys);
+#elif F_ATOMIC
+    force_atomic(&sys);
+#elif F_BASIC
+    force_basic(&sys);    
 #else
 	force(&sys);
-#endif /* CELL */
+#endif /* CELL AND F_INDEX_ARRAY */
         
         if (rank == 0)
             timer += stamp();
         
-        velverlet_2(&sys);
+        if (rank == 0)
+            velverlet_2(&sys);
         
 #else /* TIMING */
         /* write output, if requested */
@@ -178,9 +193,15 @@ int main(int argc, char **argv)
 	// Sort the particles inside the cells
 	sort(&sys, cel);
         cell_force(&sys, cel);
-#else
+#elif F_INDEX_ARRAY
+        force_index_array(&sys);
+#elif F_ATOMIC
+    force_atomic(&sys);
+#elif F_BASIC
+    force_basic(&sys);    
+#else   
 	force(&sys);
-#endif /* CELL */
+#endif /* CELL AND F_INDEX_ARRAY */
         
         if (rank == 0)
             velverlet_2(&sys);
