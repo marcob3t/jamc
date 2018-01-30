@@ -15,13 +15,13 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 
 #### Jiaxin Wang:
 * unit test for kinetic energy: [test_ekin](./test/test_ekin.c)
-* calculation optimization: report below in "OPT log" section
-* cell list module: [cell](./src/cell.cc)
+* optimization: report below in "OPT log" section
+* cell list module: [cell](./src/cell.c)
 * unit test for cell list: [test_cell](./test/test_cell.c)
 
 #### Marco Bettiol:
 * unit test for integration: [test_velverlet_1](./test/test_velverlet_1.c) [test_velverlet_2](./test/test_velverlet_2.c)
-* multi-threading(including benchmarking): [force](./src/force.c)
+* multi-threading (including benchmarking): [force](./src/force.c)
 
 #### Carolina Bonivento:
 * unit test for input/output: [test_in](./test/test_in.c) [test_out](./test/test_out.c)
@@ -29,8 +29,8 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 
 #### Alejandra Foggia:
 * unit test for force calculation: [test_force](./test/test_force.c)
-* MPI: 
-* apply cell list: 
+* MPI: [ljmd_mpi](./src/ljmd_mpi.c.old) (already integrated in ljdm.c)
+* apply cell list: [cell](./src/cell.c) [cell_aux](./src/utilities.c)
 
 
 ## OPT log:
@@ -142,37 +142,51 @@ force function accumulated timing:
 
 comments: aggressive truncation is benefitial, so we keep it as standard *until* cell list
 
+* compiling flags
+
+```
+-ffast-math -O3
+```
+are the flags can give significant boost to computing time, '-O3' gives almost 2x
+
+others like
+```
+-msse3 -fexpensive-optimizations
+```
+give only a slight/negligible improvement
+
 
 * OMP and MPI performances
 
 force function accumulated timing:
 
-|argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
+|argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
-|73217|1.00|1/1|+agg. trunc|
-|37895|1.93|1/2|+agg. trunc|
-|26387|2.77|1/3|+agg. trunc|
-|20478|3.58|1/4|+agg. trunc|
-|16802|4.36|1/5|+agg. trunc|
-|13997|5.23|1/6|+agg. trunc|
-|12071|6.07|1/7|+agg. trunc|
-|10585|6.92|1/8|+agg. trunc|
-|9361|7.82|1/9|+agg. trunc|
-|8516|8.60|1/10|+agg. trunc|
+|73217|1.00|1|+agg. trunc|
+|37895|1.93|2|+agg. trunc|
+|26387|2.77|3|+agg. trunc|
+|20478|3.58|4|+agg. trunc|
+|16802|4.36|5|+agg. trunc|
+|13997|5.23|6|+agg. trunc|
+|12071|6.07|7|+agg. trunc|
+|10585|6.92|8|+agg. trunc|
+|9361|7.82|9|+agg. trunc|
+|8516|8.60|10|+agg. trunc|
 
 ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), first taken as best serial
-|argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
+
+|argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
-|48112|1.00|1/1|+agg. trunc newt(atomic)|
-|36787|1.31|1/2|+agg. trunc newt(atomic)|
-|29179|1.65|1/3|+agg. trunc newt(atomic)|
-|25873|1.86|1/4|+agg. trunc newt(atomic)|
-|21927|2.19|1/5|+agg. trunc newt(atomic)|
-|19927|2.41|1/6|+agg. trunc newt(atomic)|
-|17925|2.68|1/7|+agg. trunc newt(atomic)|
-|16813|2.86|1/8|+agg. trunc newt(atomic)|
-|15510|3.10|1/9|+agg. trunc newt(atomic)|
-|14796|3.25|1/10|+agg. trunc newt(atomic)|
+|48112|1.00|1|+agg. trunc newt(atomic)|
+|36787|1.31|2|+agg. trunc newt(atomic)|
+|29179|1.65|3|+agg. trunc newt(atomic)|
+|25873|1.86|4|+agg. trunc newt(atomic)|
+|21927|2.19|5|+agg. trunc newt(atomic)|
+|19927|2.41|6|+agg. trunc newt(atomic)|
+|17925|2.68|7|+agg. trunc newt(atomic)|
+|16813|2.86|8|+agg. trunc newt(atomic)|
+|15510|3.10|9|+agg. trunc newt(atomic)|
+|14796|3.25|10|+agg. trunc newt(atomic)|
 
 comments: if apply Newton's law with atomic patch of updating shared memory, we have 2x speedup with 1 thread only,
 the advantage disappeared with multi-threading.

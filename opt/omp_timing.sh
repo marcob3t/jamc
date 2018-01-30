@@ -1,6 +1,5 @@
 #! /bin/bash
 
-cd ..
 make openmp
 cd examples
 for i in {1..10}
