@@ -379,6 +379,7 @@ void force(mdsys_t *sys)
     int niters = (sys->natoms) * (sys->natoms - 1) / 2; // to linearize (and balance) the loop with openmp / mpi
     // TO DO: niters should be divided by the number of processes
     // accordingly to MPI policies
+/*
     int * indexes_i, * indexes_j; // to store indexes
 
     // allocate and compute indexes
@@ -390,7 +391,7 @@ void force(mdsys_t *sys)
         indexes_j[n] = j;
       }
     }
-
+*/
     double boxby2 = 0.5*sys->box;// pre-calculate
     double rcutsq = sys->rcut*sys->rcut;// pre-calculate, take square
     double c6 = sys->epsilon*pow(sys->sigma,6);
@@ -428,13 +429,17 @@ void force(mdsys_t *sys)
 #ifndef CHUNKSIZE
 #define CHUNKSIZE=1
 #endif
-#pragma omp for schedule(dynamic,CHUNKSIZE)
+#pragma omp for schedule(guided,CHUNKSIZE)
 #endif
         for(n=0; n<niters; ++n) {
 
+            // compute indexes as a function of n
+            i = sys->natoms - 2 - (int)(sqrt(-8*n + 4*sys->natoms*(sys->natoms-1)-7)/2.0 - 0.5);
+            j = n + i + 1 - sys->natoms*(sys->natoms-1)/2 + (sys->natoms-i)*((sys->natoms-i)-1)/2;
+/*
             i=indexes_i[n]; // obtain original i index
             j=indexes_j[n]; // obtain original j index
-
+*/
             // get distance between particle i and j
             rx=pbc(sys->rx[i] - sys->rx[j], boxby2);
             rsq = rx*rx;
@@ -460,7 +465,7 @@ void force(mdsys_t *sys)
 
         // after a work sharing construct an omp barrier is implied
 #ifdef _OPENMP
-#pragma omp for schedule(dynamic)
+#pragma omp for
 #endif
         for (i=0; i<sys->natoms; ++i) {
             for (offset=sys->natoms; offset<nthds*sys->natoms; offset+=sys->natoms) {
@@ -473,9 +478,10 @@ void force(mdsys_t *sys)
     }
 
     sys->epot = epot;
-
+/*
     // free memory
     free(indexes_i);
     free(indexes_j);
+*/
 
 }
