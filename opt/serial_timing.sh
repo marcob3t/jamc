@@ -1,9 +1,10 @@
-#!/bin/bash
+#! /bin/bash
 
 make serial
 cd examples
-rm gmon.out
+for j in {1..5}
+do
 ../ljmd-serial.x < argon_108.inp
-gprof ../ljmd-serial.x > serial.txt
+done
 cd ..
 make clean
