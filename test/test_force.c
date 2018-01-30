@@ -5,6 +5,9 @@ int main(int argc, char * argv[]) {
 
   mdsys_t sys3, sys4 ;
   int i;
+  FILE * fp;
+
+  fp = fopen("test_force.dat", "a");
 
   // Initialize the system
   sys3.natoms = 3;
@@ -42,20 +45,8 @@ int main(int argc, char * argv[]) {
   // Call the force function
   force(&sys3);
 
-  // Reference values
-  double refx_3[3] = {0.0, 0.0, 0.0};
-  double refy_3[3] = {0.0, 0.0, 0.0};
-  double refz_3[3] = {0.0, 0.0, 0.0};
-
-  // Check: compare new obtained values with reference
-  // Check absolute value and sign
-  for (i = 0; i < (sys3.natoms); ++i) {
-    
-    if (abs(sys3.fx[i]) != abs(refx_3[i])) return 1;
-
-    if (abs(sys3.fy[i]) != abs(refy_3[i])) return 1;
-    
-    if (abs(sys3.fz[i]) != abs(refz_3[i])) return 1;
+  for (i = 0; i < sys3.natoms; ++i) {
+    fprintf(fp, "%d%20.8f%20.8f%20.8f\n", i, sys3.fx[i], sys3.fy[i], sys3.fz[i]);
   }
 
   // SECOND CASE: two inside the cutoff, one outside
@@ -78,28 +69,8 @@ int main(int argc, char * argv[]) {
   // Call the force function
   force(&sys3);
 
-  // Reference values
-  refx_3[0] = 0.0;
-  refx_3[1] = 0.0;
-  refx_3[2] = 0.0;
-
-  refy_3[0] = 0.0;
-  refy_3[1] = -0.16679902;
-  refy_3[2] = 0.16679902;
-
-  refz_3[0] = 0.0;
-  refz_3[1] = 0.0;
-  refz_3[2] = 0.0;
-
-  // Check: compare new obtained values with reference
-  // Check absolute value and sign  
-  for (i = 0; i < (sys3.natoms); ++i) {
-
-    if (abs(sys3.fx[i]) != abs(refx_3[i])) return 1;
-
-    if (abs(sys3.fy[i]) != abs(refy_3[i])) return 1;
-
-    if (abs(sys3.fz[i]) != abs(refz_3[i])) return 1;
+  for (i = 0; i < sys3.natoms; ++i) {
+    fprintf(fp, "%d%20.8f%20.8f%20.8f\n", i, sys3.fx[i], sys3.fy[i], sys3.fz[i]);
   }
 
   // THIRD CASE: all inside the cutoff
@@ -122,28 +93,8 @@ int main(int argc, char * argv[]) {
   // Call the force function
   force(&sys3);
 
-  // Reference values
-  refx_3[0] = 12572.18187481;
-  refx_3[1] = -58.63923988;
-  refx_3[2] = -12513.54263493;
-
-  refy_3[0] = 12572.18187481;
-  refy_3[1] = -58.63923988;
-  refy_3[2] = -12513.54263493;
-  
-  refz_3[0] = 12572.18187481;
-  refz_3[1] = -58.63923988;
-  refz_3[2] = -12513.54263493;
-
-  // Check: compare new obtained values with reference
-  // Check absolute value and sign  
-  for (i = 0; i < (sys3.natoms); ++i) {
-
-    if (abs(sys3.fx[i]) != abs(refx_3[i])) return 1;
-
-    if (abs(sys3.fy[i]) != abs(refy_3[i])) return 1;
-
-    if (abs(sys3.fz[i]) != abs(refz_3[i])) return 1;
+  for (i = 0; i < sys3.natoms; ++i) {
+    fprintf(fp, "%d%20.8f%20.8f%20.8f\n", i, sys3.fx[i], sys3.fy[i], sys3.fz[i]);
   }
   
   free(sys3.rx);
@@ -195,20 +146,8 @@ int main(int argc, char * argv[]) {
   // Call the force function
   force(&sys4);
 
-  // Reference values
-  double refx_4[4] = {0.0, 0.0, 0.0, 0.0};
-  double refy_4[4] = {0.0, 0.00474609, 0.0, -0.00474609};
-  double refz_4[4] = {0.0, 0.0, 0.00359940, -0.00359940};
-
-  // Check: compare new obtained values with reference
-  // Check absolute value and sign
-  for (i = 0; i < (sys4.natoms); ++i) {
-
-    if (abs(sys4.fx[i]) != abs(refx_4[i])) return 1;
-
-    if (abs(sys4.fy[i]) != abs(refy_4[i])) return 1;
-
-    if (abs(sys4.fz[i]) != abs(refz_4[i])) return 1;
+  for (i = 0; i < sys4.natoms; ++i) {
+    fprintf(fp, "%d%20.8f%20.8f%20.8f\n", i, sys4.fx[i], sys4.fy[i], sys4.fz[i]);
   }
   
   free(sys4.rx);

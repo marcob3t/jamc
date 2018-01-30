@@ -12,7 +12,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <vector>
 #include <ctype.h>
+#ifdef USE_MPI
+#include <mpi.h>
+#endif
 
 /* generic file- or pathname buffer length */
 #define BLEN 200
@@ -31,9 +35,11 @@ struct _mdsys {
     double *vx, *vy, *vz;
     double *fx, *fy, *fz;
     
-    // for cells
+    // for cells *****
     int cn;
     double cl;
+    std::vector<int> pair;
+    //*******
 };
 
 typedef struct _mdsys mdsys_t;
@@ -46,11 +52,14 @@ int get_a_line(FILE *fp, char *buf);
 void azzero(double *d, const int n);
 
 /* helper function: apply minimum image convention */
+/*
 static inline double pbc(double x, const double boxby2) {
     while (x >  boxby2) x -= 2.0*boxby2;
     while (x < -boxby2) x += 2.0*boxby2;
     return x;
 }
+ */
+double pbc(double x, const double boxby2); // for profiling
 
 /* compute kinetic energy */
 void ekin(mdsys_t *sys);
@@ -67,5 +76,27 @@ void output(mdsys_t *sys, FILE *erg, FILE *traj);
 
 /* timer in ms */
 double stamp();
+
+
+//*********************** CELL *********
+
+// cell structure
+struct _mdcell {
+    std::vector<int> idx;
+};
+
+typedef struct _mdcell cell_t;
+
+/* pair up cell indecies */
+void pair(mdsys_t *sys);
+
+/* 3D->1D index translator */
+int index3d(mdsys_t *sys, int i, int j, int k);
+
+/* place elements in cells */
+void sort(mdsys_t *sys, cell_t *cel);
+
+/* calculate force with cell list */
+void cell_force(mdsys_t *sys, cell_t *cel);
 
 #endif
