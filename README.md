@@ -17,11 +17,12 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 * unit test for kinetic energy: [test_ekin](./test/test_ekin.c)
 * optimization: report below in "OPT log" section
 * cell list module: [cell](./src/cell.c)
-* unit test for cell list: [test_cell](./test/test_cell.c)
+* unit test for cell list: [test_cell](./test/test_cell.c) [cell_aux](./src/utilities.c)
 
 #### Marco Bettiol:
 * unit test for integration: [test_velverlet_1](./test/test_velverlet_1.c) [test_velverlet_2](./test/test_velverlet_2.c)
 * multi-threading (including benchmarking): [force](./src/force.c)
+* mixing MPI-OPM [force](./src/force.c)
 
 #### Carolina Bonivento:
 * unit test for input/output: [test_in](./test/test_in.c) [test_out](./test/test_out.c)
@@ -29,14 +30,15 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 
 #### Alejandra Foggia:
 * unit test for force calculation: [test_force](./test/test_force.c)
-* MPI: [ljmd_mpi](./src/ljmd_mpi.c.old) (already integrated in ljdm.c)
+* MPI: [ljmd_mpi](./src/ljmd.c) [force](./src/force.c)
+* mixing MPI-OPM [force](./src/force.c)
 * apply cell list: [cell](./src/cell.c) [cell_aux](./src/utilities.c)
 
 
 ## OPT log:
 (related source files in [here](./opt/) )
 
-* profiling original code
+* profiling original code (argon_108)
 
 ```
 Each sample counts as 0.01 seconds.
@@ -70,7 +72,7 @@ if(rsq>rcutsq) continue;
 ```
 which is a temporary solution before implementing cell-list
 
-profiling with using aggressive truncatioin
+profiling with using aggressive truncatioin (argon_108)
 
 ```
 Each sample counts as 0.01 seconds.
@@ -114,7 +116,7 @@ for(i=0; i < (sys->natoms); ++i) {
 }
 ```
 
-profiling with Newton 3rd law and aggressive truncation
+profiling with Newton 3rd law and aggressive truncation (argon_108)
 
 ```
 Each sample counts as 0.01 seconds.
@@ -160,6 +162,8 @@ give only a slight/negligible improvement
 
 force function accumulated timing:
 
+ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), first taken as best serial
+
 |argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
 |73217|1.00|1|+agg. trunc|
@@ -172,8 +176,6 @@ force function accumulated timing:
 |10585|6.92|8|+agg. trunc|
 |9361|7.82|9|+agg. trunc|
 |8516|8.60|10|+agg. trunc|
-
-ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), first taken as best serial
 
 |argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
@@ -191,23 +193,88 @@ ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), fir
 comments: if apply Newton's law with atomic patch of updating shared memory, we have 2x speedup with 1 thread only,
 the advantage disappeared with multi-threading.
 
+|argon_2916 (ms)|speedup|OMP_threads|feature|
+|--------------|--------|---------------------|-------|
+|56591|1.00|1|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|34801|1.62|2|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|27157|2.08|3|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|23643|2.39|4|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|21298|2.65|5|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|19819|2.86|6|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|18700|3.03|7|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|18016|3.14|8|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|17185|3.29|9|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|16861|3.36|10|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+
+|argon_2916 (ms)|speedup|OMP_threads|feature|
+|--------------|--------|---------------------|-------|
+|91417|1.00|1|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|46329|1.97|2|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|31536|2.90|3|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|23896|3.83|4|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|19806|4.62|5|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|16512|5.54|6|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|14512|6.30|7|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|12894|7.09|8|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|11899|7.68|9|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|10952|8.35|10|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+
+
+
 |argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
 |--------------|--------|---------------------|-------|
-|||1/10|+Newton +agg.|
-|||2/10|+Newton +agg.|
-|||3/10|+Newton +agg.|
-|||4/10|+Newton +agg.|
+|64287|1.0|1/1|+Newton +agg.|
+|39563|1.62|2/1|+Newton +agg.|
+|30437|2.11|3/1|+Newton +agg.|
+|24761|2.60|4/1|+Newton +agg.|
 
 
 * applying cell-list
 
-profiling with cell list
+profiling with original code (argon_2916)
 
-force function accumulated timing:
+```
+Each sample counts as 0.01 seconds.
+%   cumulative   self              self     total
+time   seconds   seconds    calls  ms/call  ms/call  name
+88.67     95.83    95.83     1001    95.74   107.17  force(_mdsys*)
+10.59    107.28    11.45 6961373659     0.00     0.00  pbc(double, double)
+0.82    108.17     0.89     1001     0.89     0.89  ekin(_mdsys*)
+0.02    108.19     0.02     1000     0.02     0.02  velverlet_2(_mdsys*)
+0.01    108.20     0.01     1000     0.01     0.01  velverlet_1(_mdsys*)
+0.00    108.20     0.00     3006     0.00     0.00  azzero(double*, int)
+0.00    108.20     0.00     2000     0.00     0.00  stamp()
+0.00    108.20     0.00       12     0.00     0.00  get_a_line(_IO_FILE*, char*)
+```
+
+profiling with cell list (argon_2916)
+
+```
+Each sample counts as 0.01 seconds.
+%   cumulative   self              self     total
+time   seconds   seconds    calls  ms/call  ms/call  name
+75.32     18.41    18.41     1001    18.39    24.18  cell_force(_mdsys*, _mdcell*)
+23.69     24.20     5.79 3463801270     0.00     0.00  pbc(double, double)
+0.59     24.35     0.15     1001     0.15     0.15  ekin(_mdsys*)
+0.20     24.40     0.05     1001     0.05     0.09  sort(_mdsys*, _mdcell*)
+0.16     24.44     0.04  2918916     0.00     0.00  index3d(_mdsys*, int, int, int)
+0.08     24.46     0.02     1000     0.02     0.02  velverlet_2(_mdsys*)
+0.04     24.47     0.01     1000     0.01     0.01  velverlet_1(_mdsys*)
+0.00     24.47     0.00     3006     0.00     0.00  azzero(double*, int)
+0.00     24.47     0.00     2000     0.00     0.00  stamp()
+0.00     24.47     0.00      469     0.00     0.00  std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&)
+0.00     24.47     0.00       12     0.00     0.00  get_a_line(_IO_FILE*, char*)
+0.00     24.47     0.00        8     0.00     0.00  std::vector<int, std::allocator<int> >::push_back(int const&)
+0.00     24.47     0.00        1     0.00     0.00  pair(_mdsys*)
+
+```
+
+force function (+ sorting atoms into cells) accumulated timing:
 
 |argon_108 (ms)|argon_2916 (ms)|feature|
 |--------------|---------------|-------|
-|              |               |serial cell-list|
+|2999|99288|original|
+|1543|22633|serial cell-list|
 
 
 
