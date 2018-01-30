@@ -17,14 +17,14 @@ Molecular Dynamics with Lennard-Jones potential energy.
 
 This code can be used in a wide variety of ways:
 
-     1) depending on the hardware available:
-         -- Serial code
-         -- Parallel code with:
-			          --- OpenMP
-			          --- MPI
+* depending on the hardware available:
+     * Serial code
+     * Parallel code with:
+			     * OpenMP
+			     * MPI
 
-     2) With or without a major optimization: cell list
-     3) And with different implementations of the `force` function
+     * With or without a major optimization: cell list
+     * And with different implementations of the `force` function
 
 #### Basic Compilation
 
@@ -36,19 +36,29 @@ Two other options are possible. Typing `make unitest`, a series of test are perf
 
 Inside each `objects_` folder there's a `Makefile` in where several flags can be activated. In each one the following flags are available:
 
-1) F_INDEX_ARRAY (to use the force function where the third Newton's law is applied, the loop is linearized and the indexes are pre-calculated in an array)
+* F_INDEX_ARRAY (to use the force function where the third Newton's law is applied, the loop is linearized and the indexes are pre-calculated in an array)
 
-2) F_ATOMIC (to use the force function where the third Newton's law is applied and an atomic operation is performed by OpenMP)
+* F_ATOMIC (to use the force function where the third Newton's law is applied and an atomic operation is performed by OpenMP)
 
-3) F_BASIC (to use the force function where the Newton's third law is not applied)
+* F_BASIC (to use the force function where the Newton's third law is not applied)
 
-4) The default one is the latest version of the force function, where the third Newton's law is implemented, the loop is linearized and the indexes are calculated in the loop.
+* The default one is the latest version of the force function, where the third Newton's law is implemented, the loop is linearized and the indexes are calculated in the loop.
 
 In order to make OpenMP available the flag `-fopenmp` needs to be added in `CFLAGS`. To use MPI, the corresponding flag is `USE_MPI`. OpenMP and also MPI are available for all the previous versions of the `force` function.
 
 #### Using the cell list optimization
 
 The cell list optimization is only available to use it with the serial code and the force function is special in this case. In order to make this available the flag `CELL` needs to be added in the `CFLAGS`. This can be added in all of the `objects_.../Makefile` but the program has no parallel optimization implemented in that case.
+
+### Using the Python interface
+
+In order to use the Python interface:
+
+1) type `make serial` in the root directory
+
+2) go to `examples` directory and type `python ../ljmd_py/ljmd.py < input_file_name.inp` This will read the input file and it will print on screan the initialization values for the `mdsys_t` structure.
+
+To run the unit tests in Python, inside the `ljmd_py` folder type `python test_<function_name>.py`.
 
 ## Contributions:
 
