@@ -1,7 +1,6 @@
 # -*- Makefile -*-
-SHELL=/bin/sh
 CC=g++
-CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer -fopenmp -DCHUNKSIZE=1 #-DTIMING #-pg 
+CFLAGS=-Wall -g -O3 -ffast-math -fexpensive-optimizations -fomit-frame-pointer -fopenmp -DCHUNKSIZE=1 #-DTIMING #-pg 
 LDLIBS=-lm
 
 # list of source files
@@ -19,12 +18,8 @@ clean:
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
-# special for cell
-$(OBJDIR)/cell.o: $(SRCDIR)/cell.cc $(SRCDIR)/cell.h
-	$(CC) -c $(CFLAGS) -I$(SRCDIR) -I. $< -o $@
-
 # linker rule
-../ljmd-openmp.x: $(OBJ) cell.o
+../ljmd-openmp.x: $(OBJ)
 	$(CC) -o $@ $(CFLAGS) $^ $(LDLIBS)
 
 

@@ -15,21 +15,21 @@ void force(mdsys_t *sys)
     // TO DO: niters should be divided by the number of processes
     // accordingly to MPI policies
     int * indexes_i, * indexes_j; // to store indexes
-
+    
     int nprocs, rank, local_niter, lower_bound, upper_bound;
 #ifdef USE_MPI
     MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     int rest = niters%nprocs;
     if (rank < rest) {
-      local_niter = niters/nprocs + 1;
-      lower_bound = local_niter * rank;
-      upper_bound = (rank + 1) * local_niter;
+        local_niter = niters/nprocs + 1;
+        lower_bound = local_niter * rank;
+        upper_bound = (rank + 1) * local_niter;
     }
     else {
-      local_niter = niters/nprocs;
-      lower_bound = local_niter * rank + rest;
-      upper_bound = (rank + 1) * local_niter + rest;
+        local_niter = niters/nprocs;
+        lower_bound = local_niter * rank + rest;
+        upper_bound = (rank + 1) * local_niter + rest;
     }
     // Broadcast the positions to all processes
     MPI_Bcast(sys->rx, sys->natoms, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -42,32 +42,32 @@ void force(mdsys_t *sys)
     lower_bound = 0;
     upper_bound = niters;
 #endif /* USE_MPI */
-
+    
     
     // allocate and compute indexes
     indexes_i=(int *)malloc(niters*sizeof(int));
     indexes_j=(int *)malloc(niters*sizeof(int));
     for (i=0, n=0; i<sys->natoms; ++i) {
-      for (j=i+1; j<sys->natoms; ++j, ++n) {
-        indexes_i[n] = i;
-        indexes_j[n] = j;
-      }
+        for (j=i+1; j<sys->natoms; ++j, ++n) {
+            indexes_i[n] = i;
+            indexes_j[n] = j;
+        }
     }
-
+    
     double boxby2 = 0.5*sys->box;// pre-calculate
     double rcutsq = sys->rcut*sys->rcut;// pre-calculate, take square
     double c6 = sys->epsilon*pow(sys->sigma,6);
     double c12 = sys->epsilon*pow(sys->sigma,12);
-
+    
 #ifdef _OPENMP
 #pragma omp parallel private(fx,fy,fz,i,j,rx,ry,rz,rsq,rsq_inv,r6,ffac,offset) reduction(+:epot)
 #endif
     {
-
+        
         // who is who
         int thid; // thread id
         int nthds; // number of threads
-
+        
 #ifdef _OPENMP
         thid = omp_get_thread_num();
         nthds = omp_get_num_threads();
@@ -75,17 +75,17 @@ void force(mdsys_t *sys)
         thid = 0;
         nthds = 1;
 #endif
-
+        
         // assign slices of force array to threads
         fx = sys->fx + (thid * sys->natoms);
         fy = sys->fy + (thid * sys->natoms);
         fz = sys->fz + (thid * sys->natoms);
-
+        
         // zero energy and forces
         azzero(fx,sys->natoms);
         azzero(fy,sys->natoms);
         azzero(fz,sys->natoms);
-
+        
         // main loop
 #ifdef _OPENMP
 #ifndef CHUNKSIZE
@@ -94,10 +94,10 @@ void force(mdsys_t *sys)
 #pragma omp for schedule(dynamic,CHUNKSIZE)
 #endif
         for(n=lower_bound; n<upper_bound; ++n) {
-
+            
             i=indexes_i[n]; // obtain original i index
             j=indexes_j[n]; // obtain original j index
-
+            
             // get distance between particle i and j
             rx=pbc(sys->rx[i] - sys->rx[j], boxby2);
             rsq = rx*rx;
@@ -108,7 +108,7 @@ void force(mdsys_t *sys)
             rz=pbc(sys->rz[i] - sys->rz[j], boxby2);
             rsq += rz*rz;
             if(rsq>rcutsq) continue;
-
+            
             rsq_inv = 1.0/rsq;
             r6 = rsq_inv*rsq_inv*rsq_inv;
             ffac = (48*c12*r6-24*c6)*r6*rsq_inv;
@@ -120,45 +120,45 @@ void force(mdsys_t *sys)
             fz[i] += rz*ffac;
             fz[j] -= rz*ffac;
         }
-
+        
         // after a work sharing construct an omp barrier is implied
 #ifdef _OPENMP
 #pragma omp for schedule(dynamic)
 #endif
         for (i=0; i<sys->natoms; ++i) {
             for (offset=sys->natoms; offset<nthds*sys->natoms; offset+=sys->natoms) {
-              sys->fx[i] += sys->fx[offset + i];
-              sys->fy[i] += sys->fy[offset + i];
-              sys->fz[i] += sys->fz[offset + i];
+                sys->fx[i] += sys->fx[offset + i];
+                sys->fy[i] += sys->fy[offset + i];
+                sys->fz[i] += sys->fz[offset + i];
             }
         }
-
+        
     }
-
+    
     sys->epot = epot;
-
-#ifdef USE_MPI  
+    
+#ifdef USE_MPI
     // Communicate forces
     if (rank == 0){
-      MPI_Reduce(MPI_IN_PLACE, sys->fx, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-      MPI_Reduce(MPI_IN_PLACE, sys->fy, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-      MPI_Reduce(MPI_IN_PLACE, sys->fz, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(MPI_IN_PLACE, sys->fx, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(MPI_IN_PLACE, sys->fy, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(MPI_IN_PLACE, sys->fz, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     }
     else {
-      MPI_Reduce(sys->fx, sys->fx, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-      MPI_Reduce(sys->fy, sys->fy, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-      MPI_Reduce(sys->fz, sys->fz, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(sys->fx, sys->fx, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(sys->fy, sys->fy, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(sys->fz, sys->fz, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     }
-
+    
     // Communicate epot
     if (rank == 0)
-      MPI_Reduce(MPI_IN_PLACE, &sys->epot, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(MPI_IN_PLACE, &sys->epot, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     else
-      MPI_Reduce(&sys->epot, &sys->epot, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&sys->epot, &sys->epot, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 #endif /* USE_MPI */
-
+    
     // free memory
     free(indexes_i);
     free(indexes_j);
-
+    
 }
