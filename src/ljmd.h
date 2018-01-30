@@ -27,6 +27,9 @@
 
 /* structure to hold the complete information 
  * about the MD system */
+
+extern "C"{
+
 struct _mdsys {
     int natoms,nfi,nsteps;
     double dt, redmass, epsilon, sigma, box, rcut;
@@ -100,3 +103,4 @@ void sort(mdsys_t *sys, cell_t *cel);
 void cell_force(mdsys_t *sys, cell_t *cel);
 
 #endif
+}

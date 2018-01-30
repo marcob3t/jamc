@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     sys.cn = floor(sys.box/sys.cl);
 
     // Allocate memory for the array of cells
-    cel = new(cell_t[sys.cn*sys.cn*sys.cn]);
+    cel = new cell_t[sys.cn*sys.cn*sys.cn];
     
     // Create the list of cell pairs that are going to be used in the force calculation
     pair(&sys);
