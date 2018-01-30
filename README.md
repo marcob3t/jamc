@@ -209,9 +209,18 @@ give only a slight/negligible improvement
 
 * OMP and MPI performances
 
+OpenMP
+
+Tests run in the Ulysses cluster:
+- full node resrved (2 sockets, 10 cores per socket);
+- no binding to socket;
+- sample of 5 measurements;
+- errors are of the order of `10ms`, so results are reported accordingly;
+- result with `OMP_NUM_THREADS=1` taken as best serial version;
+
 force function accumulated timing:
 
-ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), first taken as best serial
+1) first approach (`force_basic.c`); aggressive serial version, without 3rd Newton law;
 
 |argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
@@ -225,6 +234,8 @@ ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), fir
 |10585|6.92|8|+agg. trunc|
 |9361|7.82|9|+agg. trunc|
 |8516|8.60|10|+agg. trunc|
+
+2) added 3rd Newton law (with atomic directive)
 
 |argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
@@ -242,6 +253,8 @@ ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), fir
 comments: if apply Newton's law with atomic patch of updating shared memory, we have 2x speedup with 1 thread only,
 the advantage disappeared with multi-threading.
 
+3) linear loop, with replicated memory for the forces and integer arrays to store particles `i` and `j` indexes
+
 |argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
 |56591|1.00|1|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
@@ -254,6 +267,8 @@ the advantage disappeared with multi-threading.
 |18016|3.14|8|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
 |17185|3.29|9|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
 |16861|3.36|10|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+
+4) same as 3, but wit in-place computation of `i` and `j` indexes
 
 |argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
