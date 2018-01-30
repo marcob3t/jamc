@@ -162,6 +162,8 @@ give only a slight/negligible improvement
 
 force function accumulated timing:
 
+ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), first taken as best serial
+
 |argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
 |73217|1.00|1|+agg. trunc|
@@ -174,8 +176,6 @@ force function accumulated timing:
 |10585|6.92|8|+agg. trunc|
 |9361|7.82|9|+agg. trunc|
 |8516|8.60|10|+agg. trunc|
-
-ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), first taken as best serial
 
 |argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
@@ -192,6 +192,34 @@ ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), fir
 
 comments: if apply Newton's law with atomic patch of updating shared memory, we have 2x speedup with 1 thread only,
 the advantage disappeared with multi-threading.
+
+|argon_2916 (ms)|speedup|OMP_threads|feature|
+|--------------|--------|---------------------|-------|
+|56591|1.00|1|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|34801|1.62|2|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|27157|2.08|3|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|23643|2.39|4|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|21298|2.65|5|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|19819|2.86|6|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|18700|3.03|7|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|18016|3.14|8|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|17185|3.29|9|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+|16861|3.36|10|+agg. trunc newt(lin.loop, replicated mem, idx.array)|
+
+|argon_2916 (ms)|speedup|OMP_threads|feature|
+|--------------|--------|---------------------|-------|
+|91417|1.00|1|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|46329|1.97|2|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|31536|2.90|3|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|23896|3.83|4|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|19806|4.62|5|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|16512|5.54|6|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|14512|6.30|7|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|12894|7.09|8|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|11899|7.68|9|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+|10952|8.35|10|+agg. trunc newt(lin.loop, replicated mem, inplace indexes)|
+
+
 
 |argon_2916 (ms)|speedup|MPI_procs/OMP_threads|feature|
 |--------------|--------|---------------------|-------|
