@@ -17,11 +17,12 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 * unit test for kinetic energy: [test_ekin](./test/test_ekin.c)
 * optimization: report below in "OPT log" section
 * cell list module: [cell](./src/cell.c)
-* unit test for cell list: [test_cell](./test/test_cell.c)
+* unit test for cell list: [test_cell](./test/test_cell.c) [cell_aux](./src/utilities.c)
 
 #### Marco Bettiol:
 * unit test for integration: [test_velverlet_1](./test/test_velverlet_1.c) [test_velverlet_2](./test/test_velverlet_2.c)
 * multi-threading (including benchmarking): [force](./src/force.c)
+* mixing MPI-OPM [force](./src/force.c)
 
 #### Carolina Bonivento:
 * unit test for input/output: [test_in](./test/test_in.c) [test_out](./test/test_out.c)
@@ -29,14 +30,15 @@ P1.6 group assignment (GROUP 1): Lennard-Jones Molecular Dynamics
 
 #### Alejandra Foggia:
 * unit test for force calculation: [test_force](./test/test_force.c)
-* MPI: [ljmd_mpi](./src/ljmd_mpi.c.old) (already integrated in ljdm.c)
+* MPI: [ljmd_mpi](./src/ljmd.c) [force](./src/force.c)
+* mixing MPI-OPM [force](./src/force.c)
 * apply cell list: [cell](./src/cell.c) [cell_aux](./src/utilities.c)
 
 
 ## OPT log:
 (related source files in [here](./opt/) )
 
-* profiling original code
+* profiling original code (argon_108)
 
 ```
 Each sample counts as 0.01 seconds.
@@ -70,7 +72,7 @@ if(rsq>rcutsq) continue;
 ```
 which is a temporary solution before implementing cell-list
 
-profiling with using aggressive truncatioin
+profiling with using aggressive truncatioin (argon_108)
 
 ```
 Each sample counts as 0.01 seconds.
@@ -114,7 +116,7 @@ for(i=0; i < (sys->natoms); ++i) {
 }
 ```
 
-profiling with Newton 3rd law and aggressive truncation
+profiling with Newton 3rd law and aggressive truncation (argon_108)
 
 ```
 Each sample counts as 0.01 seconds.
