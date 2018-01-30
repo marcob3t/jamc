@@ -1,6 +1,6 @@
 # -*- Makefile -*-
 CC=g++
-CFLAGS=-Wall -g -O3 -ffast-math -fexpensive-optimizations -fomit-frame-pointer -fopenmp #-DF_INTERLEAVED -DCHUNKSIZE=1 #-DTIMING #-pg 
+CFLAGS=-Wall -g -O3 -ffast-math -fexpensive-optimizations -fomit-frame-pointer -fopenmp -DCHUNKSIZE=1 #-DTIMING #-pg 
 LDLIBS=-lm
 
 # list of source files
