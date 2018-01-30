@@ -1,4 +1,4 @@
-/* 
+/*
  * simple lennard-jones potential MD code with velocity verlet.
  * units: Length=Angstrom, Mass=amu; Energy=kcal
  *
@@ -27,6 +27,9 @@
 
 /* structure to hold the complete information 
  * about the MD system */
+
+extern "C"{
+
 struct _mdsys {
     int natoms,nfi,nsteps;
     double dt, redmass, epsilon, sigma, box, rcut;
@@ -102,5 +105,6 @@ void sort(mdsys_t *sys, cell_t *cel);
 
 /* calculate force with cell list */
 void cell_force(mdsys_t *sys, cell_t *cel);
-
+}
 #endif
+
