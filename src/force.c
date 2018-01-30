@@ -31,6 +31,10 @@ void force(mdsys_t *sys)
         lower_bound = local_niter * rank + rest;
         upper_bound = (rank + 1) * local_niter + rest;
     }
+    // Broadcast the positions to all processes
+    MPI_Bcast(sys->rx, sys->natoms, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(sys->ry, sys->natoms, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(sys->rz, sys->natoms, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 #else
     nprocs = 1;
     rank = 0;
@@ -85,7 +89,7 @@ void force(mdsys_t *sys)
         // main loop
 #ifdef _OPENMP
 #ifndef CHUNKSIZE
-#define CHUNKSIZE=1
+#define CHUNKSIZE 1
 #endif
 #pragma omp for schedule(dynamic,CHUNKSIZE)
 #endif
@@ -132,6 +136,26 @@ void force(mdsys_t *sys)
     }
     
     sys->epot = epot;
+    
+#ifdef USE_MPI
+    // Communicate forces
+    if (rank == 0){
+        MPI_Reduce(MPI_IN_PLACE, sys->fx, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(MPI_IN_PLACE, sys->fy, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(MPI_IN_PLACE, sys->fz, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    }
+    else {
+        MPI_Reduce(sys->fx, sys->fx, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(sys->fy, sys->fy, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(sys->fz, sys->fz, sys->natoms, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    }
+    
+    // Communicate epot
+    if (rank == 0)
+        MPI_Reduce(MPI_IN_PLACE, &sys->epot, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    else
+        MPI_Reduce(&sys->epot, &sys->epot, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+#endif /* USE_MPI */
     
     // free memory
     free(indexes_i);
