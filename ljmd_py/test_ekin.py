@@ -15,6 +15,7 @@ def main():
 
 #pass size
     mdsys.natoms=10
+    
 #pass constants
     mdsys.redmass = 39.948*2390.05736153349
 
