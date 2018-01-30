@@ -160,10 +160,18 @@ give only a slight/negligible improvement
 
 * OMP and MPI performances
 
+OpenMP
+
+Tests run in the Ulysses cluster:
+- full node resrved (2 sockets, 10 cores per socket);
+- no binding to socket;
+- sample of 5 measurements;
+- errors are of the order of `10ms`, so results are reported accordingly;
+- result with `OMP_NUM_THREADS=1` taken as best serial version;
+
 force function accumulated timing:
 
-ulysses cluster, full node, no binding to socket, 5 meas. sample, err O(10), first taken as best serial
-
+1) first approach (`force_basic.c`) 
 |argon_2916 (ms)|speedup|OMP_threads|feature|
 |--------------|--------|---------------------|-------|
 |73217|1.00|1|+agg. trunc|
