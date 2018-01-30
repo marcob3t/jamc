@@ -84,6 +84,7 @@ int main(int argc, char **argv)
     sys.fx=(double *)malloc(sys.natoms*nthds*sizeof(double));
     sys.fy=(double *)malloc(sys.natoms*nthds*sizeof(double));
     sys.fz=(double *)malloc(sys.natoms*nthds*sizeof(double));
+    
     // Only the master process will perform the verlet algorithm
     if (rank == 0) {
         sys.vx=(double *)malloc(sys.natoms*sizeof(double));
@@ -123,6 +124,10 @@ int main(int argc, char **argv)
     cell_force(&sys, cel);
 #elif F_INDEX_ARRAY
     force_index_array(&sys);
+#elif F_ATOMIC
+    force_atomic(&sys);
+#elif F_BASIC
+    force_basic(&sys);
 #else
     force(&sys);
 #endif /* CELL AND F_INDEX_ARRAY */
@@ -160,6 +165,10 @@ int main(int argc, char **argv)
 	cell_force(&sys, cel);
 #elif F_INDEX_ARRAY
         force_index_array(&sys);
+#elif F_ATOMIC
+    force_atomic(&sys);
+#elif F_BASIC
+    force_basic(&sys);    
 #else
 	force(&sys);
 #endif /* CELL AND F_INDEX_ARRAY */
@@ -186,7 +195,11 @@ int main(int argc, char **argv)
         cell_force(&sys, cel);
 #elif F_INDEX_ARRAY
         force_index_array(&sys);
-#else
+#elif F_ATOMIC
+    force_atomic(&sys);
+#elif F_BASIC
+    force_basic(&sys);    
+#else   
 	force(&sys);
 #endif /* CELL AND F_INDEX_ARRAY */
         
