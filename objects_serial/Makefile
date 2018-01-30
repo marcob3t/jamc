@@ -22,7 +22,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 # dynamic lib
 ../ljmd.so: $(filter-out $(OBJDIR)/ljmd.o,$(OBJ))
-	$(CC) -o $@ -shared $(LDLIBS) $^
+	$(CC) -o $@ -shared -fPIC $(LDLIBS) $^
 
 clean:
 	rm -f *.o ../ljmd-serial.x
